@@ -24,6 +24,8 @@ class Game:
         self._numPlayers=0
         self._NoOfTurn=0
         self._pTurn=1
+        self._currBag =None
+
 
 
     def incrementTurn(self):
@@ -33,10 +35,21 @@ class Game:
     def ChangeNumPlayers(self,numPlayers):
         self._numPlayers= numPlayers
 
+    def playTurn(self):
+        pass
+
+
+class Player:
+    def __init__(self):
+        self._rack=[]
+        self._points=0
+        
+
 
 class Dictionary:
     def __init__(self):
         self._Dawg = None
+        self._currLanguage=None
 
 
     def CreateDawg(self,filename):
@@ -53,6 +66,21 @@ class Dictionary:
 
 
 
+class English(Dictionary):
+    def __init__(self):
+        self._bag=[]
+        for i in range(12):
+            self._bag.append("E")
+        for i in range(9):
+            self._bag.append("I")
+            self._bag.append("A")
+        for i in range(8):
+            self._bag.append("O")
+        for i in range(6):
+            self._bag.append("N")
+            self._bag.append("R")
+            self._bag.append("T")
+        
 
     
 
