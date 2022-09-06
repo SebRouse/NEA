@@ -6,6 +6,10 @@ class DawgNode:
         self.EndOfWord = False
         self.children={}
 
+
+
+
+
 class Dawg:
     def __init__(self):
         self.root = DawgNode()
@@ -37,10 +41,6 @@ class Dawg:
         CurrentNode.EndOfWord=True
         self.previousWord=word
 
-        
-
-
-        
 
 
     def minimize(self, min, CurrentNode):
@@ -52,4 +52,18 @@ class Dawg:
                 self.minimisedNodes[child]= child
             CurrentNode = parent
         return CurrentNode
+
+    def search(self,word):
+        node = self.root
+        for l in word:
+            if l in node.children:
+                node = node.children[l]
+            else:
+                return False
+        if node.EndOfWord == True:
+            return True
+        else:
+            return False
+            
+            
             

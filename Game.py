@@ -1,3 +1,7 @@
+from DAWG import Dawg
+from DAWG import DawgNode
+
+
 class Game:
 
     def __init__ (self):
@@ -28,6 +32,27 @@ class Game:
 
     def ChangeNumPlayers(self,numPlayers):
         self._numPlayers= numPlayers
+
+
+class Dictionary:
+    def __init__(self):
+        self._Dawg = None
+
+
+    def CreateDawg(self,filename):
+        self._Dawg=Dawg()
+        file1 = open(filename,'r')
+        lines = file1.readlines()
+        for line in lines:
+            self._Dawg.insert(line)
+    
+
+    def search(self,word):
+        match =self._Dawg.search(word)
+        return match
+
+
+
 
     
 
