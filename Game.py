@@ -28,6 +28,7 @@ class Game:
 
 
 
+
     def incrementTurn(self):
         self._NoOfTurn+=1
         self._pTurn = self._NoOfTurn % self._numPlayers
@@ -81,6 +82,18 @@ class English(Dictionary):
             self._bag.append("R")
             self._bag.append("T")
         
+
+
+class Player:
+    def __init__(self):
+        self._points = 0
+        self._rack = 0
+    
+
+
+
+
+
 
     
 
