@@ -23,8 +23,9 @@ class Game:
         ["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"]]
         self._numPlayers=0
         self._NoOfTurn=0
-        self._pTurn=1
+        self._pTurn=0
         self._currBag =None
+        self._players=[]
 
 
 
@@ -36,8 +37,17 @@ class Game:
     def ChangeNumPlayers(self,numPlayers):
         self._numPlayers= numPlayers
 
+    def showBoard(self):
+        return self._board
+
     def playTurn(self):
         pass
+
+    def addPlayers(self,numPlayers):
+        for i in range(numPlayers):
+            self._players.append(Player())
+        self._numPlayers= numPlayers
+
 
 
 class Player:
