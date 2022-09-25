@@ -24,11 +24,14 @@ class Game:
         self._numPlayers=0
         self._NoOfTurn=0
         self._pTurn=0
+        self._dict= Dictionary()
         self._currBag =None
         self._players=[]
 
 
-
+    def updateLanguage(self,n):
+        self._dict.updateLanguage(n)
+        self._currBag= self._dict.getBag()
 
     def incrementTurn(self):
         self._NoOfTurn+=1
@@ -36,6 +39,12 @@ class Game:
 
     def ChangeNumPlayers(self,numPlayers):
         self._numPlayers= numPlayers
+    
+    def getTurnNo(self):
+        return(self._NoOfTurn)
+    
+    def getPTurn(self):
+        return(self._pTurn)
 
     def showBoard(self):
         return self._board
@@ -49,11 +58,6 @@ class Game:
         self._numPlayers= numPlayers
 
 
-
-class Player:
-    def __init__(self):
-        self._rack=[]
-        self._points=0
         
 
 
@@ -61,6 +65,8 @@ class Dictionary:
     def __init__(self):
         self._Dawg=None
         self._languages[English()]
+        self._pointsDict=None
+        self._bag=None
 
 
     def CreateDawg(self,filename):
@@ -79,6 +85,12 @@ class Dictionary:
         self._bag = self._languages[i].returnBag
         self._pointsDict = self._languages[i].returnPointsDict
         self.CreateDawg(self._languages[i].returnFilename)
+
+    def getBag(self):
+        return self._bag
+    
+    def getPointsDict(self):
+        return self._pointsDict
 
 
 
@@ -111,7 +123,7 @@ class English:
 
 
 
-        self._pointsDict = {}
+
         self._filename= "English.txt"
     
     def returnBag(self):
