@@ -55,7 +55,7 @@ class Dawg:
 
     
     def finish(self):
-        self.minimize( 0 );
+        self.minimize(0)
 
     def search(self,word):
         node=self.root
