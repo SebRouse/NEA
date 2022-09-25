@@ -7,9 +7,6 @@ class DawgNode:
         self.children={}
 
 
-
-
-
 class Dawg:
     def __init__(self):
         self.root = DawgNode()
@@ -19,7 +16,6 @@ class Dawg:
     
     def insert(self, word):
 
-        CurrentNode = self.root
 
         LengthOfCommonPrefix = 0
         length = min(len(word),len(self.previousWord))
@@ -29,8 +25,13 @@ class Dawg:
             else:
                 break
 
-        if self.uncheckedNodes: 
-            CurrentNode = self.minimize(LengthOfCommonPrefix,CurrentNode)
+        self.minimize(LengthOfCommonPrefix)
+        if len(self.uncheckedNodes) == 0:
+            CurrentNode = self.root
+        else:
+            CurrentNode = self.uncheckedNodes[-1][2]
+
+
 
         for l in word[LengthOfCommonPrefix:]:
             NextNode= DawgNode()
@@ -43,27 +44,26 @@ class Dawg:
 
 
 
-    def minimize(self, min, CurrentNode):
-        for i in range(len(self.uncheckedNodes)-1,min,-1):
+    def minimize(self, min):
+        for i in range(len(self.uncheckedNodes)-1,min-1,-1):
             parent, letter, child = self.uncheckedNodes.pop()
             if child in self.minimisedNodes:
                 parent.children[letter]= self.minimisedNodes[child]
             else:
                 self.minimisedNodes[child]= child
-            CurrentNode = parent
-        return CurrentNode
+
+
+    
+    def finish(self):
+        self.minimize( 0 );
 
     def search(self,word):
-        node = self.root
+        node=self.root
         for l in word:
-            if l in node.children:
-                node = node.children[l]
-            else:
+            if l not in node.children:
                 return False
-        if node.EndOfWord == True:
-            return True
-        else:
-            return False
+            node = node.children[l]
+        return node.EndOfWord
 
 
 

@@ -49,25 +49,34 @@ class Player:
 
 class Dictionary:
     def __init__(self):
-        self._Dawg = None
-        self._currLanguage=None
-
+        self._Dawg=None
 
     def CreateDawg(self,filename):
         self._Dawg=Dawg()
         file1 = open(filename,'r')
         lines = file1.readlines()
         for line in lines:
-            self._Dawg.insert(line)
+            self._Dawg.insert(str(line).strip())
     
 
     def search(self,word):
         match =self._Dawg.search(word)
         return match
 
+    def updateLanguage(self,i):
+        self._bag = self._languages[i].returnBag
+        self._pointsDict = self._languages[i].returnPointsDict
+        self.CreateDawg(self._languages[i].returnFilename)
 
 
-class English(Dictionary):
+
+
+
+
+
+
+
+class English:
     def __init__(self):
         self._bag=[]
         for i in range(12):
@@ -81,13 +90,39 @@ class English(Dictionary):
             self._bag.append("N")
             self._bag.append("R")
             self._bag.append("T")
+
+        self._pointsDict = {}
+        self._filename= "english.txt"
+    
+    def returnBag(self):
+        return self._bag
+    
+    def returnPointsDict(self):
+        return self._pointsDict
+
+    def returnFilename(self):
+        return self._filename
         
 
 
 class Player:
     def __init__(self):
         self._points = 0
-        self._rack = 0
+        self._rack = []
+
+    def updateRack(self,NewRack):
+        self._rack=NewRack
+
+    def displayRack(self):
+        return self._rack
+
+    def updatePoints(self,points):
+        self._points+= points
+
+    def displayPoints(self):
+        return self._points
+
+    
     
 
 
