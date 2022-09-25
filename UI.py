@@ -12,8 +12,10 @@ class Terminal(UI):
         pass
 
     def turn(self,game):
-        pass
+        print(game.showBoard())
 
     def run(self):
         game = Game()
+        game.addPlayers(2)
+        game.updateLanguage(0)
         self.turn(game)
