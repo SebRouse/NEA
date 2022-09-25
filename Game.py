@@ -56,7 +56,7 @@ class Dictionary:
         file1 = open(filename,'r')
         lines = file1.readlines()
         for line in lines:
-            self._Dawg.insert(str(line).strip())
+            self._Dawg.insert(str(line).strip().upper())
     
 
     def search(self,word):
