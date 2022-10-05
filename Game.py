@@ -1,4 +1,4 @@
-from numpy import empty
+
 from Languages import Dictionary
 import random
 
@@ -64,7 +64,20 @@ class Game:
         rack = self.players[n].displayRack()
         for i in range(7-len(rack)):
             if self._currBag:
-                pass
+                x=random.randint(0,len(self._currBag))
+                rack.append(self._currBag[x])
+                self._currBag.pop(x)
+            else:
+                break
+        
+    def isGameOver(self):
+        if not self._currBag and not self.players.displayRack():
+            return True
+        else:
+            return False
+
+
+
             
         
 
