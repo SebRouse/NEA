@@ -1,3 +1,4 @@
+from multiprocessing.pool import TERMINATE
 from Game import Game
 from abc import ABC, abstractmethod
 
@@ -16,7 +17,22 @@ class Terminal(UI):
         print(game.showBoard())
         print(f"Player 1: {game.players[game.getPTurn()].displayPoints()}")
         print(f"Player {game.getPTurn()+1}'s turn")
+        while True:
+            l = input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")
+            if str(l) == "-1":
+                break
+            Y = int(input("Enter Y coordinate of turn"))
+            X = int(input("Enter X coordinate of turn"))
+            game.currMoves.append([l,Y,X])
+        if not game.validateTurn():
+            print("Invalid Move")
+        else:
+            game.calculatePoints()
         
+        if game.isGameOver:
+            TERMINATE
+        game.endTurn()
+
 
     def run(self):
         game = Game()

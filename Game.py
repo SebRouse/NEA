@@ -27,11 +27,14 @@ class Game:
         self._dict= Dictionary()
         self._currBag =None
         self.players=[]
+        self.currMoves =[]
+        self._pointsDict ={}
 
 
     def updateLanguage(self,n):
         self._dict.updateLanguage(n)
         self._currBag= self._dict.getBag()
+        self._pointsDict=self._dict.getPointsDict()
 
     def incrementTurn(self):
         self._NoOfTurn+=1
@@ -76,6 +79,21 @@ class Game:
             return True
         else:
             return False
+
+    def validateTurn(self):
+        pass
+    
+    def calculatePoints(self):
+        points = 0
+        for i in range(len(self.currMoves)):
+            points += self._pointsDict[self.currMoves[i][0]]
+        self.players[self._pTurn].updatePoints(points)
+
+    def findWinner(self):
+        pass
+
+    def endTurn(self):
+        pass
 
 
 
