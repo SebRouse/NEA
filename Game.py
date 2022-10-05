@@ -69,6 +69,7 @@ class Game:
                 self._currBag.pop(x)
             else:
                 break
+        self.players[n].updateRack(rack)
         
     def isGameOver(self):
         if not self._currBag and not self.players.displayRack():
