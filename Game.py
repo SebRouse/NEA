@@ -28,6 +28,7 @@ class Game:
         self._currBag =None
         self.players=[]
         self.currMoves =[]
+        self.formedWords=[]
         self._pointsDict ={}
 
 
@@ -84,13 +85,54 @@ class Game:
         pass
     
     def calculatePoints(self):
-        points = 0
-        for i in range(len(self.currMoves)):
-            points += self._pointsDict[self.currMoves[i][0]]
-        self.players[self._pTurn].updatePoints(points)
+        pass
+
 
     def findWinner(self):
-        pass
+        Max = 0
+        index= None
+        flag = False
+        for i in range (self._numPlayers):
+            if self.players[i].getPoints() > Max:
+                Max = self.players[i].getPoints()
+                index == i
+            elif self.players[i].getPoints() ==Max:
+                flag = True
+        
+        if flag:
+            Max = 0
+            index = None
+            for i in range (self._numPlayers):
+                if self.players[i].getPreEndPoints() > Max:
+                    Max = self.players[i].getPreEndPoints()
+                    index == i
+
+        return index 
+
+
+
+
+    def deductPoint(self):
+        points = 0
+        index = None
+        for i in range (self._numPlayers):
+            self.players[i].updatePreEndPoints(self.players[i].getPoints())
+            if len(self.players[i].displayRack()) == 0:
+                index = i
+            else:
+                playerPoints = 0
+                for j in self.players[i].displayRack():
+                    playerPoints += self._pointsDict[j]
+                    
+                points += playerPoints
+
+                self.players[i].updatePoints ( -playerPoints )
+
+        self.players[index].updatePoints(points)
+
+
+
+
 
     def endTurn(self):
         pass
@@ -111,6 +153,7 @@ class Player:
     def __init__(self):
         self._points = 0
         self._rack = []
+        self._preEndPoints = 0
 
     def updateRack(self,NewRack):
         self._rack=NewRack
@@ -121,9 +164,14 @@ class Player:
     def updatePoints(self,points):
         self._points+= points
 
-    def displayPoints(self):
+    def getPoints(self):
         return self._points
 
+    def updatePreEndPoints(self,points):
+        self._preEndPoints+= points
+
+    def getPreEndPoints(self):
+        return self._preEndPoints
     
     
 

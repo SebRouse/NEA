@@ -15,7 +15,7 @@ class Terminal(UI):
 
     def turn(self,game : Game):
         print(game.showBoard())
-        print(f"Player 1: {game.players[game.getPTurn()].displayPoints()}")
+        print(f"Player 1: {game.players[game.getPTurn()].getPoints()}")
         print(f"Player {game.getPTurn()+1}'s turn")
         while True:
             l = input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")
@@ -30,6 +30,10 @@ class Terminal(UI):
             game.calculatePoints()
         
         if game.isGameOver:
+            winner = game.findWinner()
+            print("*"*30)
+            print(f"Player {winner} won")
+            print("*"*30)
             TERMINATE
         game.endTurn()
 
