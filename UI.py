@@ -18,7 +18,7 @@ class Terminal(UI):
         print(f"Player 1: {game.players[game.getPTurn()].getPoints()}")
         print(f"Player {game.getPTurn()+1}'s turn")
         while True:
-            l = input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")
+            l = str(input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")).upper()
             if str(l) == "-1":
                 break
             Y = int(input("Enter Y coordinate of turn"))
@@ -46,3 +46,5 @@ class Terminal(UI):
         for i in range (numPlayers):
             game.updatePlayerRack(i)
         self.turn(game)
+
+

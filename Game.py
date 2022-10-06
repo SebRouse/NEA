@@ -77,12 +77,14 @@ class Game:
         
     def isGameOver(self):
         if not self._currBag and not self.players.displayRack():
+            self.deductPoints()
             return True
         else:
             return False
 
     def validateTurn(self):
         pass
+    
     
     def calculatePoints(self):
         pass
@@ -112,7 +114,7 @@ class Game:
 
 
 
-    def deductPoint(self):
+    def deductPoints(self):
         points = 0
         index = None
         for i in range (self._numPlayers):
@@ -126,22 +128,13 @@ class Game:
                     
                 points += playerPoints
 
-                self.players[i].updatePoints ( -playerPoints )
+                self.players[i].updatePoints (-playerPoints)
 
         self.players[index].updatePoints(points)
 
 
-
-
-
     def endTurn(self):
         pass
-
-
-
-            
-        
-
         
 
     

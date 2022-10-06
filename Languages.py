@@ -19,7 +19,7 @@ class Dictionary:
     
 
     def search(self,word):
-        match =self._Dawg.search(word)
+        match =self._Dawg.search(word.upper())
         return match
 
     def updateLanguage(self,i):
@@ -67,3 +67,18 @@ class English:
 
     def returnFilename(self):
         return self._filename
+
+
+class Spanish:
+    def __init__(self):
+        self._bag=[]
+        for i in range(12):
+            self._bag.append("A");self._bag.append("E")
+            if i < 9:
+                self._bag.append("O")
+            if i <6:
+                self._bag.append("S")
+                self._bag.append("I")
+            if i <5:
+                
+
