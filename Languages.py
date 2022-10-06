@@ -77,8 +77,28 @@ class Spanish:
             if i < 9:
                 self._bag.append("O")
             if i <6:
-                self._bag.append("S")
-                self._bag.append("I")
+                self._bag.append("S");self._bag.append("I")
             if i <5:
+                self._bag.append("D");self._bag.append("U");self._bag.append("N");self._bag.append("R")
+            if i <4:
+                self._bag.append("C");self._bag.append("L");self._bag.append("T")
+            if i<2:
+                self._bag.append("B");self._bag.append("G");self._bag.append("H");self._bag.append("M");self._bag.append("P");self._bag.append("blank")
+            if i<1:
+                self._bag.append("CH");self._bag.append("F");self._bag.append("J");self._bag.append("LL");self._bag.append("Ñ");self._bag.append("Q")
+                self._bag.append("RR");self._bag.append("V");self._bag.append("X");self._bag.append("Y");self._bag.append("Z")
 
+        self._filename="Spanish.txt"
+
+
+
+
+    def returnBag(self):
+        return self._bag
+    
+    def returnPointsDict(self):
+        return self._pointsDict  
+
+    def returnFilename(self):
+        return self._filename
 
