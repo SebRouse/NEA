@@ -63,7 +63,7 @@ class English:
         return self._bag
     
     def returnPointsDict(self):
-        return self._pointsDict
+        return self._pointsDict  
 
     def returnFilename(self):
         return self._filename
@@ -80,5 +80,5 @@ class Spanish:
                 self._bag.append("S")
                 self._bag.append("I")
             if i <5:
-                
+
 
