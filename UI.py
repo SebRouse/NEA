@@ -15,7 +15,8 @@ class Terminal(UI):
 
     def turn(self,game : Game):
         print(game.printBoard())
-        print(f"Player 1: {game.players[game.getPTurn()].getPoints()}")
+        print(f"Player 1: {game.players[0].getPoints()} points")
+        print(f"Player 2: {game.players[1].getPoints()} points")
         print(f"Player {game.getPTurn()+1}'s turn")
         while True:
             l = str(input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")).upper()

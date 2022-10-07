@@ -5,7 +5,7 @@ import random
 class Game:
 
     def __init__ (self):
-        self._board = [[None]*15 for y in range (15)]
+        self._board = [[' ']*15 for y in range (15)]
         self._boardPoints= [["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
         [None,None,"DWS",None,None,None,"DLS",None,"DLS",None,None,None,"DWS",None,None],
@@ -137,12 +137,17 @@ class Game:
         pass
 
     def printBoard(self):
-        x = ""
-        for i in range(15):
-            x +=(" "+str(i)+" ")
+        x = "   "
+        for i in range(10):
+            x +=(" "+str(i)+"   ")
+        for i in range (10,15):
+            x +=(" "+str(i)+"  ")
+
         print(x)
-        for i in range(15):
-            print(str(i)+str(self._board[i]))
+        for i in range(10):
+            print(str(i)+" "+str(self._board[i]))
+        for i in range(10,15):
+            print(str(i)+str(self._board[i]))            
         
 
         
