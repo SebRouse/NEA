@@ -14,7 +14,7 @@ class Terminal(UI):
         pass
 
     def turn(self,game : Game):
-        print(game.showBoard())
+        print(game.printBoard())
         print(f"Player 1: {game.players[game.getPTurn()].getPoints()}")
         print(f"Player {game.getPTurn()+1}'s turn")
         while True:
@@ -48,3 +48,5 @@ class Terminal(UI):
         self.turn(game)
 
 
+g=Terminal()
+g.run()

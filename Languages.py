@@ -5,14 +5,15 @@ from DAWG import DawgNode
 class Dictionary:
     def __init__(self):
         self._Dawg=None
-        self._languages[English()]
+        self._languages=[English(),Spanish()]
         self._pointsDict=None
-        self._bag=None
+        self._bag=[]
+
 
 
     def CreateDawg(self,filename):
         self._Dawg=Dawg()
-        file1 = open(filename,'r')
+        file1 = open(filename,"r")
         lines = file1.readlines()
         for line in lines:
             self._Dawg.insert(str(line).strip().upper())
@@ -23,9 +24,9 @@ class Dictionary:
         return match
 
     def updateLanguage(self,i):
-        self._bag = self._languages[i].returnBag
+        self._bag = self._languages[i].returnBag()
         self._pointsDict = self._languages[i].returnPointsDict
-        self.CreateDawg(self._languages[i].returnFilename)
+        self.CreateDawg(self._languages[i].returnFilename())
 
     def getBag(self):
         return self._bag
