@@ -61,14 +61,14 @@ class Game:
 
     def addPlayers(self,numPlayers):
         for i in range(numPlayers):
-            self._players.append(Player())
+            self.players.append(Player())
         self._numPlayers= numPlayers
 
     def updatePlayerRack(self,n):
         rack = self.players[n].displayRack()
         for i in range(7-len(rack)):
             if self._currBag:
-                x=random.randint(0,len(self._currBag))
+                x=random.randint(0,len(self._currBag)-1)
                 rack.append(self._currBag[x])
                 self._currBag.pop(x)
             else:
@@ -135,6 +135,16 @@ class Game:
 
     def endTurn(self):
         pass
+
+    def printBoard(self):
+        x = ""
+        for i in range(15):
+            x +=(" "+str(i)+" ")
+        print(x)
+        for i in range(15):
+            print(str(i)+str(self._board[i]))
+        
+
         
 
     
