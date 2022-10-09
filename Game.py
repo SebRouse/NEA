@@ -5,7 +5,7 @@ import random
 class Game:
 
     def __init__ (self):
-        self._board = [[' ']*15 for y in range (15)]
+        self._board = [[None]*15 for y in range (15)]
         self._boardPoints= [["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
         [None,None,"DWS",None,None,None,"DLS",None,"DLS",None,None,None,"DWS",None,None],
@@ -27,7 +27,7 @@ class Game:
         self._dict= Dictionary()
         self._currBag =None
         self.players=[]
-        self.currMoves =[]
+
         self.formedWords=[]
         self._pointsDict ={}
 
@@ -82,12 +82,169 @@ class Game:
         else:
             return False
 
-    def validateTurn(self):
-        pass
-    
-    
+
+    def validateTurn(self,currMoves):
+        pRack =self.players[self._pTurn].displayRack()
+
+
+        for i in range (len(currMoves)):
+
+            if currMoves[i][0] not in pRack:
+                if "blank" not in pRack:
+                    return False
+                else:
+                    pRack.remove("blank")
+            else:
+                pRack.remove(currMoves[i][0])
+
+            if currMoves[i][1] >= 15 or currMoves[i][2] >= 15:
+                return False
+
+        vert= True
+        horz = True
+        for i in range(len(currMoves)-1):
+            if vert and currMoves[i][1] == currMoves[i+1][1]:
+                horz = False
+            elif horz and currMoves[i][2] == currMoves[i+1][2]:
+                vert = False
+            else:
+                return False
+
+        boardCopy = self._board
+            
+        for i in range(len(currMoves)):
+            
+            if boardCopy[currMoves[i][1]][currMoves[i][2]] != None:
+                return False
+            
+            boardCopy[currMoves[i][1]][currMoves[i][2]] = currMoves[i][0]
+
+
+        match =1
+        count = 1
+        if vert == True:
+            while True:
+                horizontalValue= currMoves[0][2]
+                if currMoves[0][1] + count >= 15 or boardCopy[currMoves[i][1]+count][horizontalValue] == None:
+                    break
+                
+                for i in range(len(currMoves)):
+                    if currMoves[0][1]+count == currMoves[i][1]:
+                        match += 1
+                    
+                count += 1
+
+            count = 1
+            while True:
+                horizontalValue= currMoves[i][2]
+                if currMoves[0][1] - count >= 15 or boardCopy[currMoves[i][1]-count][horizontalValue] == None:
+                    break
+                
+                for i in range(len(currMoves)):
+                    if currMoves[0][1]-count == currMoves[i][1]:
+                        match += 1
+                    
+                count += 1          
+
+        elif horz == True:
+            while True:
+                verticalValue= currMoves[0][1]
+                if currMoves[0][2] + count >= 15 or boardCopy[verticalValue][currMoves[i][2]+count] == None:
+                    break
+                
+                for i in range(len(currMoves)):
+                    if currMoves[0][2]+count == currMoves[i][2]:
+                        match += 1
+                    
+                count += 1
+            count =1
+            while True:
+                verticalValue= currMoves[0][1]
+                if currMoves[0][2] - count >= 15 or boardCopy[verticalValue][currMoves[i][2]-count] == None:
+                    break
+                
+                for i in range(len(currMoves)):
+                    if currMoves[0][2]-count == currMoves[i][2]:
+                        match += 1
+                    
+                count += 1   
+
+        if match != len(currMoves):
+            return False
+
+        word = ""
+        if vert == True:
+            for i in range(currMoves[0][1],15):
+                if boardCopy[i][currMoves[0][2]] == None:
+                    break
+                else:
+                    word = word + boardCopy[i][currMoves[0][2]]
+            for i in range(currMoves[0][1]-1,-1,-1):
+                if boardCopy[i][currMoves[0][2]] == None:
+                    break
+                else:
+                    word =  boardCopy[i][currMoves[0][2]] + word
+
+            if self._dict.search(word) == False:
+                return False
+
+            for i in range(len(currMoves)):
+                word =""
+                for j in range(currMoves[i][2],15):
+                    if boardCopy[currMoves[i][1]][j] == None:
+                        break
+                    else:
+                        word = word + boardCopy[currMoves[i][1]][j]
+                for j in range(currMoves[i][2]-1,-1,-1):
+                    if boardCopy[currMoves[i][1]][j] == None:
+                        break
+                    else:
+                        word = boardCopy[ currMoves[i][1] ][j] + word    
+
+                if len(word) > 1:
+                    if self._dict.search(word)==False:
+                        return False
+
+        elif horz == True:
+            for i in range(currMoves[0][2],15):
+                if boardCopy[currMoves[0][1]][i] == None:
+                    break
+                else:
+                    word = word + boardCopy[currMoves[0][1]][i]
+            for i in range(currMoves[0][2]-1,-1,-1):
+                if boardCopy[currMoves[0][1]][i] == None:
+                    break
+                else:
+                    word = boardCopy[currMoves[0][1]][i] + word 
+
+            if self._dict.search(word) == False:
+                return False
+
+            for i in range(len(currMoves)):
+                word = ""
+                for j in range(currMoves[i][1],15):
+                    if boardCopy[j][currMoves[j][2]] == None:
+                        break
+                    else:
+                        word = word + boardCopy[j][currMoves[i][2]]
+                for j in range(currMoves[i][1]-1,-1,-1):
+                    if boardCopy[j][ currMoves[i][2] ] == None:
+                        break
+                    else:
+                        word =  boardCopy[j][currMoves[i][2]] + word  
+                if len(word)> 1:
+                    if self._dict.search(word) == False:
+                        return False
+
+        self._board = boardCopy
+
+        return True           
+                
+
     def calculatePoints(self):
         pass
+
+
 
 
     def findWinner(self):
@@ -133,10 +290,14 @@ class Game:
         self.players[index].updatePoints(points)
 
 
-    def endTurn(self):
-        pass
+
 
     def printBoard(self):
+        board = self._board
+        for i in range(15):
+            for j in range(15):
+                if board[i][j]== None:
+                    board[i][j] = " "
         x = "   "
         for i in range(10):
             x +=(" "+str(i)+"   ")
