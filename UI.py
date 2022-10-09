@@ -41,7 +41,7 @@ class Terminal(UI):
             print("*"*30)
             exit()
 
-        game.endTurn()
+        game.incrementTurn()
 
 
     def run(self):
