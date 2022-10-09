@@ -18,7 +18,7 @@ class Terminal(UI):
         print(f"Player 1: {game.players[0].getPoints()} points")
         print(f"Player 2: {game.players[1].getPoints()} points")
         print(f"Player {game.getPTurn()+1}'s turn")
-        currMoves =[]
+        currMoves = []
         while True:
             l = str(input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")).upper()
             if l == "blank":
@@ -29,10 +29,10 @@ class Terminal(UI):
             Y = int(input("Enter Y coordinate of turn"))
             X = int(input("Enter X coordinate of turn"))
             currMoves.append([l,Y,X])
-        if not game.validateTurn():
+        if not game.validateTurn(currMoves):
             print("Invalid Move")
         else:
-            game.calculatePoints()
+            game.calculatePoints(currMoves)
         
         if game.isGameOver:
             winner = game.findWinner()

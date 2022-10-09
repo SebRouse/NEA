@@ -223,7 +223,7 @@ class Game:
             for i in range(len(currMoves)):
                 word = ""
                 for j in range(currMoves[i][1],15):
-                    if boardCopy[j][currMoves[j][2]] == None:
+                    if boardCopy[j][currMoves[i][2]] == None:
                         break
                     else:
                         word = word + boardCopy[j][currMoves[i][2]]
@@ -241,11 +241,167 @@ class Game:
         return True           
                 
 
-    def calculatePoints(self):
-        pass
+    def calculatePoints(self,currMoves):
+        if len(currMoves)==1:
+            vert = True
+            horz = False
+        elif currMoves[0][1] == currMoves[1][1]:
+            vert = True
+            horz = False
+        else:
+            vert = False
+            horz = True
+
+        totalPoints=0
+
+        if vert == True:
+            vMultiplier = 1 
+            
+            for i in range(len(currMoves)):
+                wordPoints = 0
+                hMultiplier = 1
+                lMultiplier =1
+                match self._boardPoints[currMoves[i][1]][currMoves[i][2]] :
+                    case "TWS":
+                        hMultiplier = hMultiplier*3
+                        vMultiplier= vMultiplier*3
+                    case "DWS":
+                        hMultiplier =  hMultiplier*2
+                        vMultiplier = vMultiplier*2
+                    case "TLS":
+                        lMultiplier = 3
+                    case "DLS":
+                        lMultiplier = 2
+                wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier             
+                           
+                for j in range(currMoves[i][2]+1,15):
+                    if self._board[currMoves[i][1]][j] == None:
+                        break
+                    elif self._board[currMoves[i][1]][j].islower():
+                        pass
+                    else:
+                        wordPoints+=self._pointsDict[ self._board[currMoves[i][1]][j]]
+    
+
+                for j in range(currMoves[i][2]-1,-1,-1):
+                    if self._board[currMoves[i][1]][j] == None:
+                        break
+                    elif self._board[currMoves[i][1]][j].islower():
+                        pass
+                    else:
+                        wordPoints+=self._pointsDict[ self._board[currMoves[i][1]][j]]
+                wordPoints=wordPoints*hMultiplier
+                totalPoints+=wordPoints
+
+            wordPoints = 0
+            for i in range(currMoves[0][1],15):
+            
+                lMultiplier = 1
+                if self._board[i][currMoves[0][2]] == None:
+                    break
+                elif self._board[i][currMoves[0][2]].islower():
+                    pass     
+                else:
+                    for j in range(len(currMoves)):
+                        if currMoves[j][1]==i:
+                            match self._boardPoints[[i][currMoves[0][2]]] :
+                                case "TLS":
+                                    lMultiplier = 3
+                                case "DLS":
+                                    lMultiplier = 2
+                    wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
+                    
+            for i in range(currMoves[0][1]-1,-1,-1):
+                if self._board[i][currMoves[0][2]] == None:
+                    break
+                elif self._board[i][currMoves[0][2]].islower():
+                    pass              
+                else:
+                    for j in range(len(currMoves)):
+                        if currMoves[j][1]==i:
+                            match self._boardPoints[[i][currMoves[0][2]]] :
+                                case "TLS":
+                                    lMultiplier = 3
+                                case "DLS":
+                                    lMultiplier = 2
+                    wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
+            wordPoints=wordPoints*vMultiplier
+            totalPoints+=wordPoints
 
 
+        if horz == True:
+            hMultiplier =1
 
+            for i in range(len(currMoves)):
+                wordPoints=0
+                vMultiplier=1
+                match self._boardPoints[currMoves[i][1]][currMoves[i][2]] :
+                    case "TWS":
+                        vMultiplier = vMultiplier*3
+                        hMultiplier= hMultiplier*3
+                    case "DWS":
+                        vMultiplier =  vMultiplier*2
+                        hMultiplier = hMultiplier*2
+                    case "TLS":
+                        lMultiplier = 3
+                    case "DLS":
+                        lMultiplier = 2
+                if not self._board[currMoves[i][1]][currMoves[i][2]].islower():
+                    wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
+
+
+                for j in range(currMoves[i][1],15):
+                    if self._board[j][currMoves[i][2]] == None:
+                        break
+                    elif self._board[j][ currMoves[i][2] ].islower():
+                        pass
+                    else:
+                        wordPoints+=self._pointsDict[self._board[j][currMoves[i][2]]]
+                for j in range(currMoves[i][1]-1,-1,-1):
+                    if self._board[j][ currMoves[i][2] ] == None:
+                        break
+                    elif self._board[j][ currMoves[i][2] ].islower():
+                        pass
+                    else:
+                        wordPoints+=self._pointsDict[self._board[j][currMoves[i][2]]]
+                wordPoints =wordPoints*vMultiplier
+                totalPoints+=wordPoints
+
+            wordPoints = 0
+            lMultiplier=1
+            for i in range(currMoves[0][2],15):
+
+                if self._board[currMoves[0][1]][i] == None:
+                    break
+                elif self._board[currMoves[0][1]][i].islower():
+                    pass
+                else:
+                    for j in range(len(currMoves)):
+                        if currMoves[j][2]==i:
+                            match self._boardPoints[currMoves[0][1]][i] :
+                                case "TLS":
+                                    lMultiplier = 3
+                                case "DLS":
+                                    lMultiplier = 2
+                    wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
+            for i in range(currMoves[0][2]-1,-1,-1):
+                if self._board[currMoves[0][1]][i] == None:
+                    break
+                elif self._board[currMoves[0][1]][i].islower():
+                    pass
+                else:
+                    for j in range(len(currMoves)):
+                        if currMoves[j][2]==i:
+                            match self._boardPoints[currMoves[0][1]][i] :
+                                case "TLS":
+                                    lMultiplier = 3
+                                case "DLS":
+                                    lMultiplier = 2
+                    wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
+            wordPoints=wordPoints*hMultiplier
+            totalPoints+=wordPoints
+        self.player[self._pTurn].updatePoints(totalPoints)
+        return totalPoints
 
     def findWinner(self):
         Max = 0
