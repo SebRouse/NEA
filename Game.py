@@ -1,11 +1,12 @@
 
+from genericpath import exists
 from Languages import Dictionary
 import random
 
 class Game:
 
     def __init__ (self):
-        self._board = [[None]*15 for y in range (15)]
+        self._board = [[" "]*15 for y in range (15)]
         self._boardPoints= [["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
         [None,None,"DWS",None,None,None,"DLS",None,"DLS",None,None,None,"DWS",None,None],
@@ -50,7 +51,7 @@ class Game:
     def getPTurn(self):
         return(self._pTurn)
 
-    def showBoard(self):
+    def getBoard(self):
         return self._board
 
     def playTurn(self):
@@ -84,37 +85,41 @@ class Game:
 
 
     def validateTurn(self,currMoves):
-        pRack =self.players[self._pTurn].displayRack()
 
+        pRack =self.players[self._pTurn].displayRack()
 
         for i in range (len(currMoves)):
 
             if currMoves[i][0] not in pRack:
                 if "blank" not in pRack:
+                    print("Letters not in rack")
                     return False
                 else:
                     pRack.remove("blank")
             else:
                 pRack.remove(currMoves[i][0])
 
-            if currMoves[i][1] >= 15 or currMoves[i][2] >= 15:
+            if currMoves[i][1] >= 15 or currMoves[i][2] >= 15 or currMoves[i][1]<0 or currMoves[i][2] < 0:
+                print("Coordinates out of range")
                 return False
-
         vert= True
         horz = True
         for i in range(len(currMoves)-1):
-            if vert and currMoves[i][1] == currMoves[i+1][1]:
-                horz = False
-            elif horz and currMoves[i][2] == currMoves[i+1][2]:
+            if horz and currMoves[i][1] == currMoves[i+1][1]:
                 vert = False
+            elif vert and currMoves[i][2] == currMoves[i+1][2]:
+                horz = False
             else:
+                print("Coordinates not in row")
                 return False
 
         boardCopy = self._board
-            
+
         for i in range(len(currMoves)):
             
-            if boardCopy[currMoves[i][1]][currMoves[i][2]] != None:
+            if boardCopy[currMoves[i][1]][currMoves[i][2]] != " ":
+                print("A piece already occupies that square")
+
                 return False
             
             boardCopy[currMoves[i][1]][currMoves[i][2]] = currMoves[i][0]
@@ -125,7 +130,7 @@ class Game:
         if vert == True:
             while True:
                 horizontalValue= currMoves[0][2]
-                if currMoves[0][1] + count >= 15 or boardCopy[currMoves[i][1]+count][horizontalValue] == None:
+                if currMoves[0][1] + count >= 15 or boardCopy[currMoves[0][1]+count][horizontalValue] == None:
                     break
                 
                 for i in range(len(currMoves)):
@@ -137,7 +142,7 @@ class Game:
             count = 1
             while True:
                 horizontalValue= currMoves[i][2]
-                if currMoves[0][1] - count >= 15 or boardCopy[currMoves[i][1]-count][horizontalValue] == None:
+                if currMoves[0][1] - count <0 or boardCopy[currMoves[0][1]-count][horizontalValue] == None:
                     break
                 
                 for i in range(len(currMoves)):
@@ -149,7 +154,7 @@ class Game:
         elif horz == True:
             while True:
                 verticalValue= currMoves[0][1]
-                if currMoves[0][2] + count >= 15 or boardCopy[verticalValue][currMoves[i][2]+count] == None:
+                if currMoves[0][2] + count >= 15 or boardCopy[verticalValue][currMoves[0][2]+count] == None:
                     break
                 
                 for i in range(len(currMoves)):
@@ -160,7 +165,7 @@ class Game:
             count =1
             while True:
                 verticalValue= currMoves[0][1]
-                if currMoves[0][2] - count >= 15 or boardCopy[verticalValue][currMoves[i][2]-count] == None:
+                if currMoves[0][2] - count <0 or boardCopy[verticalValue][currMoves[0][2]-count] == None:
                     break
                 
                 for i in range(len(currMoves)):
@@ -400,7 +405,10 @@ class Game:
                     wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
             wordPoints=wordPoints*hMultiplier
             totalPoints+=wordPoints
+        if len(currMoves)==7:
+            totalPoints+=50
         self.player[self._pTurn].updatePoints(totalPoints)
+
         return totalPoints
 
     def findWinner(self):
@@ -449,11 +457,7 @@ class Game:
 
 
     def printBoard(self):
-        board = self._board
-        for i in range(15):
-            for j in range(15):
-                if board[i][j]== None:
-                    board[i][j] = " "
+
         x = "   "
         for i in range(10):
             x +=(" "+str(i)+"   ")
@@ -464,9 +468,13 @@ class Game:
         for i in range(10):
             print(str(i)+" "+str(self._board[i]))
         for i in range(10,15):
-            print(str(i)+str(self._board[i]))            
-        
+            print(str(i)+str(self._board[i]))    
 
+
+    def createDatabaseTable():
+        if not exists("./scrabble.db"):    
+            pass
+ 
         
 
     
