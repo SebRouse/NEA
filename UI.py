@@ -25,6 +25,8 @@ class Terminal(UI):
             if l == "blank":
                 l=str(input("Enter the letter the blank tile represents"))
                 l = l.lower()
+            else:
+                l = l.upper()
             if str(l) == "-1":
                 break
             Y = int(input("Enter Y coordinate of turn"))
@@ -43,6 +45,8 @@ class Terminal(UI):
             exit()
 
         game.incrementTurn()
+        
+        self.turn(game)
 
 
     def run(self):
