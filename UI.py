@@ -18,9 +18,10 @@ class Terminal(UI):
         print(f"Player 1: {game.players[0].getPoints()} points")
         print(f"Player 2: {game.players[1].getPoints()} points")
         print(f"Player {game.getPTurn()+1}'s turn")
+        print(f"Player {game.getPTurn()+1}'s rack: {game.players[game.getPTurn()].displayRack()}")
         currMoves = []
         while True:
-            l = str(input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: ")).upper()
+            l = str(input("Enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: "))
             if l == "blank":
                 l=str(input("Enter the letter the blank tile represents"))
                 l = l.lower()
@@ -34,7 +35,7 @@ class Terminal(UI):
         else:
             game.calculatePoints(currMoves)
         
-        if game.isGameOver:
+        if game.isGameOver():
             winner = game.findWinner()
             print("*"*30)
             print(f"Player {winner+1} won")

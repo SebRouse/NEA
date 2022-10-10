@@ -175,6 +175,7 @@ class Game:
                 count += 1   
 
         if match != len(currMoves):
+            print("Letters not connected")
             return False
 
         word = ""
@@ -191,6 +192,8 @@ class Game:
                     word =  boardCopy[i][currMoves[0][2]] + word
 
             if self._dict.search(word) == False:
+                print("Flag 1")
+                print(word)
                 return False
 
             for i in range(len(currMoves)):
@@ -208,6 +211,8 @@ class Game:
 
                 if len(word) > 1:
                     if self._dict.search(word)==False:
+                        print("Flag 2")
+                        print(word)
                         return False
 
         elif horz == True:
@@ -223,6 +228,8 @@ class Game:
                     word = boardCopy[currMoves[0][1]][i] + word 
 
             if self._dict.search(word) == False:
+                print(word)
+                print("Flag 3")
                 return False
 
             for i in range(len(currMoves)):
@@ -239,6 +246,8 @@ class Game:
                         word =  boardCopy[j][currMoves[i][2]] + word  
                 if len(word)> 1:
                     if self._dict.search(word) == False:
+                        print("Flag 4")
+                        print(word)
                         return False
 
         self._board = boardCopy
