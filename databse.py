@@ -30,3 +30,7 @@ class Databse():
       Username VARCHAR(255),
       GameID INT
       );""")
+
+
+   def createNewUser(username, password):
+      
