@@ -32,5 +32,3 @@ class Databse():
       );""")
 
 
-   def createNewUser(username, password):
-      
