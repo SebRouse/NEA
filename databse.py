@@ -30,5 +30,6 @@ class Databse():
       Username VARCHAR(255),
       GameID INT
       );""")
+   con.commit()
 
 
