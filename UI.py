@@ -1,7 +1,7 @@
 
 from Game import Game
 from abc import ABC, abstractmethod
-
+from tkinter import *
 
 
 
@@ -58,6 +58,25 @@ class Terminal(UI):
             game.updatePlayerRack(i)
         self.turn(game)
 
+class GUI(UI):
+    def __init__(self):
+        pass
 
-g=Terminal()
-g.run()
+
+    def main():
+        root = Tk()
+        root.title("Scrabble - Main Menu")
+        frame = Frame(root)
+        frame.pack()
+
+        Button(frame,text='Play Game',width = 40,height =3).pack(fill=X)
+
+        Button(frame,text='Account',width = 40,height =3).pack(fill=X)
+
+        Button(frame,text='Settings',width = 40,height =3).pack(fill=X)
+        Button(frame,text='Login',width = 40,height =3).pack(fill=X)
+
+        Button(frame,text='Quit',command=root.quit,width = 40,height =3).pack(fill=X)
+        root.mainloop()
+        g=Terminal()
+        g.run()
