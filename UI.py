@@ -1,4 +1,7 @@
 
+from cProfile import label
+
+from matplotlib.pyplot import text
 from Game import Game
 from abc import ABC, abstractmethod
 from tkinter import *
@@ -78,5 +81,31 @@ class GUI(UI):
 
         Button(frame,text='Quit',command=root.quit,width = 40,height =3).pack(fill=X)
         root.mainloop()
-        g=Terminal()
-        g.run()
+       
+
+    def login():
+        root= Tk()
+        root.title("Scrabble- Login")
+
+        label1 = Label(text ="Enter Username")
+        label1.pack()
+        canvas1 = Canvas(root, width=300, height=140)
+        canvas1.pack()
+        entry1 = Entry(root, width = 35) 
+        canvas1.create_window(150,10, window=entry1)
+        label2 = Label(text="Enter Password")
+        label1.pack()
+        canvas1.create_window(150,30,window = label2)
+        entry2 = Entry(root, width= 35)
+        entry2.pack()
+        canvas1.create_window(150,50,window=entry2)
+        button1=Button(root,text="login",width=10)
+        button1.pack()
+        canvas1.create_window(150,80,window = button1)
+        button2=Button(root,text="quit",width=10,command=root.quit)
+        button2.pack()
+        canvas1.create_window(150,115,window = button2)
+
+        root.mainloop()	
+
+
