@@ -3,7 +3,7 @@ import sqlite3
 
 class Databse():
 
-   con = sqlite3.connect("game.db")
+   con = sqlite3.connect("ScrabbleDataBase.db")
    cur = con.cursor()
    res = cur.execute("""CREATE TABLE IF NOT EXISTS Players (
       Username VARCHAR(255) PRIMARY KEY NOT NULL,

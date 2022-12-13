@@ -240,7 +240,6 @@ class Game:
 
             if self._dict.search(word) == False:
                 print(word)
-                print("Flag 3")
                 return False
 
             for i in range(len(currMoves)):
@@ -257,7 +256,7 @@ class Game:
                         word =  boardCopy[j][currMoves[i][2]] + word  
                 if len(word)> 1:
                     if self._dict.search(word) == False:
-                        print("Flag 4")
+              
                     
                         print(word)
                         return False
