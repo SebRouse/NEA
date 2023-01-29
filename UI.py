@@ -55,10 +55,13 @@ class Terminal(UI):
         game = Game()
         numPlayers = 2
         game.addPlayers(numPlayers)
-        game.updateLanguage(0)
+        game.updateLanguage("English")
         for i in range (numPlayers):
             game.updatePlayerRack(i)
         self.turn(game)
+
+game=Terminal()
+game.run()
 
 
 

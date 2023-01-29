@@ -1,5 +1,6 @@
 from DAWG import Dawg
 from DAWG import DawgNode
+from pathlib import Path
 
 
 class Dictionary:
@@ -11,7 +12,9 @@ class Dictionary:
 
 
 
-    def CreateDawg(self,filename):
+
+
+    def CreateDawg(self,filename:str):
         self._Dawg=Dawg()
         file1 = open(filename,"r")
         lines = file1.readlines()
@@ -19,11 +22,11 @@ class Dictionary:
             self._Dawg.insert(str(line).strip().upper())
     
 
-    def search(self,word):
+    def search(self,word :str):
         match =self._Dawg.search(word.upper())
         return match
 
-    def updateLanguage(self,l):
+    def updateLanguage(self,l:str):
         self._bag = self._languages[l].returnBag()
         self._pointsDict = self._languages[l].returnPointsDict()
         self.CreateDawg(self._languages[l].returnFilename())
@@ -33,6 +36,10 @@ class Dictionary:
     
     def getPointsDict(self):
         return self._pointsDict
+
+
+
+
 
 
 
@@ -93,6 +100,8 @@ class Spanish:
 
         self._filename="Spanish.txt"
 
+        self.__TrimSpanishDict()
+
 
 
 
@@ -104,4 +113,46 @@ class Spanish:
 
     def returnFilename(self):
         return self._filename
+
+    def __TrimSpanishDict(self):
+
+        path = Path('./Spanish.txt')
+
+        if path.is_file():
+            pass
+
+        else:
+            file=open("Spanish Untrimmed.txt","r",encoding="utf-8",errors="ignore")
+            spanish = open("Spanish.txt","a")
+            lines=file.readlines()
+            for i in range(1,len(lines)):
+                flag = False
+                line =""
+                for j in range( len(lines[i])):
+
+                    char =lines[i][j]
+                    
+                    if char == "ñ":
+                        print("Check")
+                        flag=True
+
+                    if char== "á":
+                        char= "a"
+                    elif char == "é":
+                        char="e"
+                    elif char ==  "í":
+                        char="i"
+                    elif char ==  "ó":
+                        char="o"
+                    elif char ==  "ú":
+                        char="u"
+
+                
+                    line+=char
+
+                if flag:
+                    print(line)
+                    print(line.upper())
+                spanish.write(f"{line.upper()}")
+
 

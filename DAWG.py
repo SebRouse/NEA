@@ -65,6 +65,8 @@ class Dawg:
             node = node.children[l]
         return node.EndOfWord
 
+    
+
 
 
 
