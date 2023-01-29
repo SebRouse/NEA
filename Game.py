@@ -22,21 +22,31 @@ class Game:
         [None,None,"DWS",None,None,None,"DLS",None,"DLS",None,None,None,"DWS",None,None],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
         ["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"]]
-        self._numPlayers=0
+        self._numPlayers=2
         self._NoOfTurn=0
         self._pTurn=0
         self._dict= Dictionary()
         self._currBag =None
         self.players=[]
-
+        self._user = None
         self.formedWords=[]
         self._pointsDict ={}
+        self._numPasses = 0
+        self._language = None
 
 
-    def updateLanguage(self,n):
-        self._dict.updateLanguage(n)
+    def increaseNumPasses(self):
+        self._numPasses+= 1
+
+    def resetPasses(self):
+        self._numPasses=0
+
+
+    def updateLanguage(self,langauge):
+        self._dict.updateLanguage(langauge)
         self._currBag= self._dict.getBag()
         self._pointsDict=self._dict.getPointsDict()
+        self._language = langauge
 
     def incrementTurn(self):
         self._NoOfTurn+=1
@@ -54,8 +64,7 @@ class Game:
     def getBoard(self):
         return self._board
 
-    def playTurn(self):
-        pass
+
 
     def getNumPlayers(self):
         return self._numPlayers
@@ -453,6 +462,8 @@ class Game:
 
         return index 
 
+
+    def search
 
 
 

@@ -5,7 +5,7 @@ from DAWG import DawgNode
 class Dictionary:
     def __init__(self):
         self._Dawg=None
-        self._languages=[English(),Spanish()]
+        self._languages={"English":English(),"Spanish":Spanish()}
         self._pointsDict=None
         self._bag=[]
 
@@ -23,10 +23,10 @@ class Dictionary:
         match =self._Dawg.search(word.upper())
         return match
 
-    def updateLanguage(self,i):
-        self._bag = self._languages[i].returnBag()
-        self._pointsDict = self._languages[i].returnPointsDict
-        self.CreateDawg(self._languages[i].returnFilename())
+    def updateLanguage(self,l):
+        self._bag = self._languages[l].returnBag()
+        self._pointsDict = self._languages[l].returnPointsDict()
+        self.CreateDawg(self._languages[l].returnFilename())
 
     def getBag(self):
         return self._bag
