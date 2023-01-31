@@ -145,7 +145,7 @@ class GUI():
         password = self._CEntryP.get()
         if username.strip() == "" or password.strip()=="":
             return False
-        check = self._account.CreateAccount(password,username)
+        check = self._account.CreateAccount(username,password)
         if check:
             self.CreateAccountSuccesful()
             self.quitCreateAccount()
@@ -181,8 +181,30 @@ class GUI():
         UError=Toplevel(self._root)
         UError.title("Scrabble - Play Game - Undo Error")
         UError.geometry("200x60")
-        Label(UError,text="Error:\n There are no moves left to undo").pack
+        Label(UError,text="Error:\n There are no moves left to undo").pack()
         Button(UError,text ="Dismiss",command=UError.destroy).pack()
+
+
+    def AccountCheck(self):
+        if self._account.getAccount():
+            self.AccountWindow()
+        else:
+            self.NotLoggedIn()
+
+    def NotLoggedIn(self):
+        AError=Toplevel(self._root)
+        AError.title("Scrabble - Account - Login Error")
+        AError.geometry("200x80")
+        Label(AError,text="Error:\n you are not logged in\n").pack()
+        Button(AError,text ="Dismiss",command=AError.destroy).pack()          
+
+    def AccountWindow(self):
+        accountWindow = Toplevel(self._root)
+        accountWindow.title("Scrabble - Account")
+        accountWindow.geometry("300x300")
+        result = self._account.GetWinLoss()
+        games,wins,losses = result[0]
+        print(games,wins,losses)
 
     def main(self):
 
@@ -194,7 +216,7 @@ class GUI():
 
 
         Button(frame,text='Play Game',width = 40,height =3,command=self.SelectLanguage).pack(fill=X)
-        Button(frame,text='Account',width = 40,height =3).pack(fill=X)
+        Button(frame,text='Account',width = 40,height =3,command = self.AccountCheck).pack(fill=X)
         Button(frame,text='Create Acount',width = 40,height =3,command=self.CreateAccountWindow).pack(fill=X)
         Button(frame,text='Login',width = 40,height =3, command=self.login).pack(fill=X)
         Button(frame,text='Help',width = 40,height =3).pack(fill=X)
