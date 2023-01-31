@@ -21,6 +21,10 @@ class Account():
    def getAccount(self):
       return self._Account
 
+   def CreateAccount(self,username,password):
+      result= self._database.CreateAccount(username,password)
+      return result
+
 
 
 

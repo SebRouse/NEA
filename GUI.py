@@ -14,7 +14,7 @@ class GUI():
         self._loginWindow = None
         self._LEntryU=None  #login window - username entry box
         self._LEntryP=None # login window - password entry box
-        self._creatAccountWindow=None
+        self._createAccountWindow=None
         self._CEntryU=None  # create account window - username entry box
         self._CEntryP=None  # create account window - password entry box
         self._account = Account()
@@ -42,8 +42,9 @@ class GUI():
     def checkLogin(self):
         username = self._LEntryU.get()
         password = self._LEntryP.get()
-        
-        check =False
+        if username.strip() == "" or password.strip()=="":
+            return False
+        check =self._account.Login(username,password)
         if check:
             self.quitLogin()
             self.loginSuccesful()
@@ -103,7 +104,10 @@ class GUI():
         canvas1.pack()
 
 
-    def CreateAccount(self):
+    def CreateAccountWindow(self):
+        if self._createAccountWindow:
+            return False
+
         self._createAccountWindow=Toplevel(self._root)
         self._createAccountWindow.title("Scrabble- Create Account")
         self._createAccountWindow.geometry("300x150")
@@ -113,22 +117,51 @@ class GUI():
         label1.pack()
         canvas1.create_window(150,10,window=label1)
 
-        entry1 = Entry(self._createAccountWindow, width = 35) 
-        entry1.pack
-        canvas1.create_window(150,30, window=entry1)
+        self._CEntryU = Entry(self._createAccountWindow, width = 35) 
+        self._CEntryU.pack
+        canvas1.create_window(150,30, window=self._CEntryU)
         label2 = Label(self._createAccountWindow,text="Enter Password")
         label2.pack()
         canvas1.create_window(150,50,window = label2)
-        entry2 = Entry(self._createAccountWindow, width= 35)
-        entry2.pack()
-        canvas1.create_window(150,70,window=entry2)
-        button1=Button(self._createAccountWindow,text="Create \n Account",width=10,command=self.AccountError)
+        self._CEntryP = Entry(self._createAccountWindow, width= 35)
+        self._CEntryP.pack()
+        canvas1.create_window(150,70,window=self._CEntryP)
+        button1=Button(self._createAccountWindow,text="Create \n Account",width=10,command=self.checkCreateAccount)
         button1.pack()
         canvas1.create_window(150,100,window = button1)
-        button2=Button(self._createAccountWindow,text="Quit",width=10,command=self._createAccountWindow.destroy)
+        button2=Button(self._createAccountWindow,text="Quit",width=10,command=self.quitCreateAccount)
         button2.pack()
         canvas1.create_window(150,135,window = button2)
         canvas1.pack()
+
+    def quitCreateAccount(self):
+        self._createAccountWindow.destroy()
+        self._createAccountWindow=None
+
+
+    def checkCreateAccount(self):
+        
+        username = self._CEntryU.get()
+        password = self._CEntryP.get()
+        if username.strip() == "" or password.strip()=="":
+            return False
+        check = self._account.CreateAccount(username,password)
+        if check == True:
+            self.CreateAccountSuccesful()
+            self.quitCreateAccount()
+        else:
+            self.AccountError()
+
+
+
+    def CreateAccountSuccesful(self):
+        createAccountSuccesful= Toplevel(self._root)
+        createAccountSuccesful.title("Scrabble - Create Account Succesful")
+        createAccountSuccesful.geometry("200x80")
+        Label(createAccountSuccesful,text="Account Created \n Succesfuly \n").pack()
+        Button(createAccountSuccesful,text="Dismiss",command=createAccountSuccesful.destroy).pack()
+
+
 
 
 
@@ -142,8 +175,7 @@ class GUI():
         Button(languageWindow,text="Spanish",width=20,height=2).pack()
     
 
-    def PlayGame(self):
-        pass
+    
 
     def UndoError(self):
         UError=Toplevel(self._root)
@@ -163,11 +195,14 @@ class GUI():
 
         Button(frame,text='Play Game',width = 40,height =3,command=self.SelectLanguage).pack(fill=X)
         Button(frame,text='Account',width = 40,height =3).pack(fill=X)
-        Button(frame,text='Create Acount',width = 40,height =3,command=self.CreateAccount).pack(fill=X)
+        Button(frame,text='Create Acount',width = 40,height =3,command=self.CreateAccountWindow).pack(fill=X)
         Button(frame,text='Login',width = 40,height =3, command=self.login).pack(fill=X)
         Button(frame,text='Help',width = 40,height =3).pack(fill=X)
         Button(frame,text='Quit',command=self._root.quit,width = 40,height =3).pack(fill=X)
         self._root.mainloop()
+
+    def PlayGame(self):
+        pass
 
 
 gui = GUI()
