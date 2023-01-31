@@ -1,6 +1,30 @@
 import sqlite3
 import hashlib
 
+
+
+class Account():
+   def __init__(self):
+      self._Account = None
+      self._database= Database()
+
+
+
+   def Login(self,Username,Password):
+      result = self._database.Login(Username,Password)
+      if result==False:
+         return False
+      else:
+         self._Account= result[0]
+         return True
+
+   def getAccount(self):
+      return self._Account
+
+
+
+
+
 class Database():
    
    def __init__(self):
@@ -64,12 +88,12 @@ class Database():
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
       pHashed= self.PasswordHash(password)
-      c.execute("SELECT rowid FROM Players WHERE Username = ? AND Password = ? ",(username,pHashed))
+      c.execute("SELECT Username FROM Players WHERE Username = ? AND Password = ? ",(username,pHashed))
       result = c.fetchall()
       if len(result) == 0:
-         return True
-      else:
          return False
+      else:
+         return result
 
    def updateWin(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
@@ -96,3 +120,7 @@ class Database():
 
    def GetGames(self):
       pass
+
+   def GetWinLoss(self,username):
+      con = sqlite3.connect("ScrabbleDataBase.db")
+      c = con.cursor()

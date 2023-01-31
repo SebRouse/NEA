@@ -33,13 +33,18 @@ class Game:
         self._pointsDict ={}
         self._numPasses = 0
         self._language = None
+        self._turnOfFirstPass=-9999
+        self._gameEndFlag = False
 
 
     def increaseNumPasses(self):
         self._numPasses+= 1
+        self._turnOfFirstPass=self._NoOfTurn
+
 
     def resetPasses(self):
         self._numPasses=0
+        self._turnOfFirstPass=-9999
 
 
     def updateLanguage(self,langauge):
@@ -49,8 +54,16 @@ class Game:
         self._language = langauge
 
     def incrementTurn(self):
+        self.updatePlayerRack(self._pTurn)
         self._NoOfTurn+=1
         self._pTurn = self._NoOfTurn % self._numPlayers
+        if self._NoOfTurn-self._turnOfFirstPass==2:
+            if self._numPasses//2 == 1:
+                pass
+            else:
+                self.resetPasses()
+
+        
 
     def ChangeNumPlayers(self,numPlayers):
         self._numPlayers= numPlayers
@@ -352,7 +365,7 @@ class Game:
                                     lMultiplier = 3
                                 case "DLS":
                                     lMultiplier = 2
-                        print(currMoves[i][1],currMoves[0][2])
+
                     wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
                     
             for i in range(currMoves[0][1]-1,-1,-1):

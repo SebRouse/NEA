@@ -51,6 +51,7 @@ rectangle_draging=False
 def drawBackround():
     screen.fill((0,0,0))
     colour=(255,255,255)
+    
     for row in range(len(board_tiles)):
         for col in range(len(board_tiles[0])):
             if board[row][col]=="TWS":

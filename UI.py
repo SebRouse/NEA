@@ -1,7 +1,6 @@
 
 from Game import Game
 from abc import ABC, abstractmethod
-
 import pygame
 
 class UI(ABC):
@@ -35,6 +34,8 @@ class Terminal(UI):
                 Y = int(input("Enter Y coordinate of turn: "))
                 X = int(input("Enter X coordinate of turn: "))
                 currMoves.append([l,Y,X])
+            if len(currMoves) == 0:
+                game.increaseNumPasses()
             if not game.validateTurn(currMoves):
                 print("Invalid Move")
             else:
@@ -62,6 +63,10 @@ class Terminal(UI):
         for i in range (numPlayers):
             game.updatePlayerRack(i)
         self.turn(game)
+
+
+
+
 
 game=Terminal()
 game.run()
