@@ -23,6 +23,7 @@ class Account():
 
    def CreateAccount(self,username,password):
       result= self._database.CreateAccount(username,password)
+      print(result)
       return result
 
 

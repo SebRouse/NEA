@@ -146,7 +146,7 @@ class GUI():
         if username.strip() == "" or password.strip()=="":
             return False
         check = self._account.CreateAccount(password,username)
-        if check == True:
+        if check:
             self.CreateAccountSuccesful()
             self.quitCreateAccount()
         else:
