@@ -70,7 +70,7 @@ class Database():
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
 
-      c.execute("SELECT rowid FROM Players WHERE Username = ?",(username,))
+      c.execute("SELECT Username FROM Players WHERE Username = ?",(username,))
       result = c.fetchall()
    
       if len(result) == 0:

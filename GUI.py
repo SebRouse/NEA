@@ -145,7 +145,7 @@ class GUI():
         password = self._CEntryP.get()
         if username.strip() == "" or password.strip()=="":
             return False
-        check = self._account.CreateAccount(username,password)
+        check = self._account.CreateAccount(password,username)
         if check == True:
             self.CreateAccountSuccesful()
             self.quitCreateAccount()
