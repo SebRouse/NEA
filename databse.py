@@ -27,6 +27,10 @@ class Account():
       return result
 
 
+   def GetWinLoss(self):
+      result = self._database.GetWinLoss(self._Account)
+      return result
+
 
 
 
@@ -129,3 +133,6 @@ class Database():
    def GetWinLoss(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
+      c.execute("SELECT NumGames,Wins,Losses FROM Players WHERE Username=?",(username,))
+      result = c.fetchall()
+      return result
