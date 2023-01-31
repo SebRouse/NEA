@@ -201,12 +201,12 @@ class Game:
         word = ""
         if vert == True:
             for i in range(currMoves[0][1],15):
-                if boardCopy[i][currMoves[0][2]] == None:
+                if boardCopy[i][currMoves[0][2]] == " ":
                     break
                 else:
                     word = word + boardCopy[i][currMoves[0][2]]
             for i in range(currMoves[0][1]-1,-1,-1):
-                if boardCopy[i][currMoves[0][2]] == None:
+                if boardCopy[i][currMoves[0][2]] == " ":
                     break
                 else:
                     word =  boardCopy[i][currMoves[0][2]] + word
@@ -278,24 +278,26 @@ class Game:
 
     def calculatePoints(self,currMoves):
         if len(currMoves)==1:
-            vert = True
-            horz = False
-        elif currMoves[0][1] == currMoves[1][1]:
-            vert = True
-            horz = False
-        else:
             vert = False
             horz = True
+        elif currMoves[0][1] == currMoves[1][1]:
+            vert = False
+            horz = True
+        else:
+            vert = True
+            horz = False
 
         totalPoints=0
 
         if vert == True:
+
             vMultiplier = 1 
             
             for i in range(len(currMoves)):
                 wordPoints = 0
                 hMultiplier = 1
                 lMultiplier =1
+                word = ""
                 match self._boardPoints[currMoves[i][1]][currMoves[i][2]] :
                     case "TWS":
                         hMultiplier = hMultiplier*3
@@ -307,25 +309,31 @@ class Game:
                         lMultiplier = 3
                     case "DLS":
                         lMultiplier = 2
-                wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier             
+                wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
+                word+= self._board [currMoves[i][1]] [currMoves[i][2]]              
                            
                 for j in range(currMoves[i][2]+1,15):
                     if self._board[currMoves[i][1]][j] == " ":
                         break
                     elif self._board[currMoves[i][1]][j].islower():
-                        pass
+                        word+=self._board[currMoves[i][1]][j]
                     else:
                         wordPoints+=self._pointsDict[ self._board[currMoves[i][1]][j]]
-    
+                        word+=self._board[currMoves[i][1]][j]
 
                 for j in range(currMoves[i][2]-1,-1,-1):
                     if self._board[currMoves[i][1]][j] == " ":
                         break
                     elif self._board[currMoves[i][1]][j].islower():
-                        pass
+                        word+=self._board[currMoves[i][1]][j]                      
+
                     else:
                         wordPoints+=self._pointsDict[ self._board[currMoves[i][1]][j]]
+                        word+=self._board[currMoves[i][1]][j]  
+
                 wordPoints=wordPoints*hMultiplier
+                if len(word)<=1:
+                    wordPoints=0
                 totalPoints+=wordPoints
 
             wordPoints = 0
@@ -339,11 +347,12 @@ class Game:
                 else:
                     for j in range(len(currMoves)):
                         if currMoves[j][1]==i:
-                            match self._boardPoints[[i][currMoves[0][2]]] :
+                            match self._boardPoints[i][currMoves[0][2]]:
                                 case "TLS":
                                     lMultiplier = 3
                                 case "DLS":
                                     lMultiplier = 2
+                        print(currMoves[i][1],currMoves[0][2])
                     wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
                     
             for i in range(currMoves[0][1]-1,-1,-1):
@@ -354,7 +363,7 @@ class Game:
                 else:
                     for j in range(len(currMoves)):
                         if currMoves[j][1]==i:
-                            match self._boardPoints[[i][currMoves[0][2]]] :
+                            match self._boardPoints[i][currMoves[0][2]] :
                                 case "TLS":
                                     lMultiplier = 3
                                 case "DLS":
@@ -362,14 +371,18 @@ class Game:
                     wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
             wordPoints=wordPoints*vMultiplier
             totalPoints+=wordPoints
+        
 
 
         if horz == True:
-            hMultiplier =1
 
+            hMultiplier =1
+            print("flag")
             for i in range(len(currMoves)):
                 wordPoints=0
                 vMultiplier=1
+                lMultiplier = 1
+                word = ""
                 match self._boardPoints[currMoves[i][1]][currMoves[i][2]] :
                     case "TWS":
                         vMultiplier = vMultiplier*3
@@ -383,22 +396,34 @@ class Game:
                         lMultiplier = 2
                 if not self._board[currMoves[i][1]][currMoves[i][2]].islower():
                     wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
+                    word+=self._board[currMoves[i][1]][currMoves[i][2]]
+                    print(wordPoints)
 
 
-                for j in range(currMoves[i][1],15):
+                for j in range(currMoves[i][1]+1,15):
                     if self._board[j][currMoves[i][2]] == " ":
                         break
                     elif self._board[j][ currMoves[i][2] ].islower():
-                        pass
+                        word+= self._board[j][ currMoves[i][2]]
+
                     else:
                         wordPoints+=self._pointsDict[self._board[j][currMoves[i][2]]]
+                        word +=self._board[j][currMoves[i][2]]
                 for j in range(currMoves[i][1]-1,-1,-1):
-                    if self._board[j][ currMoves[i][2] ] == " ":
+                    if self._board[j][ currMoves[i][2]] == " ":
+
                         break
+
                     elif self._board[j][ currMoves[i][2] ].islower():
-                        pass
+                        word+= self._board[j][ currMoves[i][2]]
+
                     else:
                         wordPoints+=self._pointsDict[self._board[j][currMoves[i][2]]]
+                        word +=self._board[j][ currMoves[i][2]]
+                if len(word) <= 1:
+                    wordPoints=0
+                print(wordPoints)
+                print("-")
                 wordPoints =wordPoints*vMultiplier
                 totalPoints+=wordPoints
 
@@ -434,10 +459,13 @@ class Game:
                                     lMultiplier = 2
                     wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
             wordPoints=wordPoints*hMultiplier
+            print("---")
+            print(wordPoints)
             totalPoints+=wordPoints
         if len(currMoves)==7:
             totalPoints+=50
-        self.player[self._pTurn].updatePoints(totalPoints)
+        print(totalPoints)
+        self.players[self._pTurn].updatePoints(totalPoints)
 
         return totalPoints
 
@@ -449,6 +477,7 @@ class Game:
             if self.players[i].getPoints() > Max:
                 Max = self.players[i].getPoints()
                 index == i
+                flag = False
             elif self.players[i].getPoints() ==Max:
                 flag = True
         
@@ -480,7 +509,7 @@ class Game:
                     
                 points += playerPoints
 
-                self.players[i].updatePoints (-playerPoints)
+                self.players[i].updatePoints(-playerPoints)
 
         self.players[index].updatePoints(points)
 
