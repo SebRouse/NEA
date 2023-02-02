@@ -31,8 +31,23 @@ class Account():
       result = self._database.GetWinLoss(self._Account)
       return result
 
-   def SaveGame(self,TurnNo,Board,Scores,Bag,Langauge):
-      self._database.saveGame(self._Account,TurnNo,Board,Scores,Bag,Langauge)
+   def SaveGame(self,TurnNo,Board,Scores,Bag,Langauge,rackP1,rackP2):
+      self._database.saveGame(self._Account,TurnNo,Board,Scores,Bag,Langauge,rackP1,rackP2)
+
+   def UpdateWin(self):
+      self._database.updateWin(self._Account)
+
+   def UpdateLoss(self):
+      self._database.updateLoss(self._Account)
+
+   def SaveGame(self,TurnNo,Board,Scores,Bag,Language,rack1,rack2):
+      self._database.saveGame(self._Account,TurnNo,Board,Scores,Bag,Language,rack1,rack2)
+
+   def LoadGame(self,GameID):
+      return self._database.loadGame(GameID)
+
+   def GetGames(self):
+      return self._database.GetGames(self._Account)
 
 
 
@@ -59,7 +74,9 @@ class Database():
          Board VARCHAR(255),
          Scores VARCHAR(255),
          Bag VARCHAR(255),
-         Language VARCHAR(255)
+         Language VARCHAR(255),
+         RackP1 VARCHAR(255),
+         RackP2 VARCHAR(255)
          );""")
       c.execute("""CREATE TABLE IF NOT EXISTS GamesPlayed(
         Username VARCHAR(255) ,
@@ -94,7 +111,7 @@ class Database():
       p=self._Sha256.HashAndDigest(password)
       return p
 
-   def Login(self,username,password):
+   def Login(self,username:str,password:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
       pHashed= self.PasswordHash(password)
@@ -121,11 +138,20 @@ class Database():
       c.execute("UPDATE players SET Losses = Losses + 1 WHERE Username = ? ",(username,))
       con.commit()     
 
-   def saveGame(self,username,TurnNo,Board,Scores,Bag,Language):
-      pass
+   def saveGame(self,username,TurnNo,Board,Scores,Bag,Language,RackP1,RackP2):
+      con = sqlite3.connect("ScrabbleDataBase.db")
+      c = con.cursor()
+      c.execute("INSERT INTO Games (TurnNo,Board,Scores,Bag,Language,RackP1,RackP2) VALUES (?,?,?,?,?,?,?)",(TurnNo,Board,Scores,Bag,Language,RackP1,RackP2))
+      rowID=c.lastrowid
+      c.execute("INSERT INTO GamesPlayed (Username,RowID) VALUES (?,?)",(username,rowID))
+      con.commit()
 
-   def loadGame(self):
-      pass
+   def loadGame(self,GameID):
+      con = sqlite3.connect("ScrabbleDataBase.db")
+      c = con.cursor()
+      c.execute("SELECT TurnNo,Board,Scores,Bag,Language,RackP1,RackP2 FROM Games WHERE GameID = ?",(GameID,))
+      result = c.fetchall()
+      return result
 
    def GetWinLoss(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
@@ -137,7 +163,7 @@ class Database():
    def GetGames(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
-      c.execute("""SELECT GameID, TurnNo,Scores, Games.Language
+      c.execute("""SELECT GameID, TurnNo,Scores, Language
       FROM Games
       INNER JOIN GamesPlayed ON GamesPlayed.GameID = Games.GameID
       WHERE GamesPlayed.Username = ?""",(username,))  

@@ -36,9 +36,23 @@ class Dictionary:
 
 
 
+class Language:
+    def __init__(self):
+        self._bag=None
+        self._pointsDict=None
+        self._filename=None
+    
+    def returnBag(self):
+        return self._bag
+    
+    def returnPointsDict(self):
+        return self._pointsDict  
+
+    def returnFilename(self):
+        return self._filename
 
 
-class English:
+class English(Language):
     def __init__(self):
         self._bag=[]
         for i in range(12):
@@ -76,17 +90,11 @@ class English:
 
         self._filename= "English.txt"
     
-    def returnBag(self):
-        return self._bag
-    
-    def returnPointsDict(self):
-        return self._pointsDict  
-
-    def returnFilename(self):
-        return self._filename
 
 
-class Spanish:
+
+class Spanish(Language):
+
     def __init__(self):
         self._bag=[]
         for i in range(12):
@@ -135,14 +143,7 @@ class Spanish:
 
 
 
-    def returnBag(self):
-        return self._bag
-    
-    def returnPointsDict(self):
-        return self._pointsDict  
 
-    def returnFilename(self):
-        return self._filename
 
     def __TrimSpanishDict(self):
 
