@@ -17,8 +17,10 @@ class Terminal(UI):
         print(f"Player 2: {game.players[1].getPoints()} points: ")
         print(f"Player {game.getPTurn()+1}'s turn")
         print(f"Player {game.getPTurn()+1}'s rack: {game.players[game.getPTurn()].displayRack()}")
-        currMoves = []
+        print(f"Bag : {game.lenBag()} tiles")
+        
         while True:
+            currMoves = []
             while True:
                 while True:
                     l = str(input(f"Player{game.getPTurn()+1} enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: "))
@@ -34,34 +36,43 @@ class Terminal(UI):
                 Y = int(input("Enter Y coordinate of turn: "))
                 X = int(input("Enter X coordinate of turn: "))
                 currMoves.append([l,Y,X])
+
             if len(currMoves) == 0:
                 game.increaseNumPasses()
+                break
             if not game.validateTurn(currMoves):
                 print("Invalid Move")
             else:
                 game.calculatePoints(currMoves)
                 break
 
-        
+
+        game.incrementTurn()
+
+
         if game.isGameOver():
+            
             winner = game.findWinner()
+            print(f"Player 1: {game.players[0].getPoints()} points: ")
+            print(f"Player 2: {game.players[1].getPoints()} points: ")
             print("*"*30)
             print(f"Player {winner+1} won")
             print("*"*30)
             exit()
 
-        game.incrementTurn()
+
         
         self.turn(game)
 
 
     def run(self):
-        game = Game()
+        game = Game(None)
         numPlayers = 2
-        game.addPlayers(numPlayers)
         game.updateLanguage("English")
-        for i in range (numPlayers):
-            game.updatePlayerRack(i)
+        game.addPlayers(numPlayers)
+        
+    
+
         self.turn(game)
 
 

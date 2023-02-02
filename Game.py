@@ -2,10 +2,13 @@
 from genericpath import exists
 from Languages import Dictionary
 import random
+from databse import Account
+from typing import Optional
+from copy import deepcopy
 
 class Game:
 
-    def __init__ (self):
+    def __init__ (self,user :Optional [Account] or None):
         self._board = [[" "]*15 for y in range (15)]
         self._boardPoints= [["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
@@ -35,11 +38,32 @@ class Game:
         self._language = None
         self._turnOfFirstPass=-9999
         self._gameEndFlag = False
+        self._passFlag=False
+        self.user=user
+
+
+
+    def SaveGame(self):
+        pass
+
+    def LoadGame(self):
+        pass
+
 
 
     def increaseNumPasses(self):
+
+        if self._numPasses ==0:
+            self._turnOfFirstPass=self._NoOfTurn
         self._numPasses+= 1
-        self._turnOfFirstPass=self._NoOfTurn
+
+    def GetPointsBoard(self):
+        return self._boardPoints
+
+    def lenBag(self):
+        return len(self._currBag)
+
+
 
 
     def resetPasses(self):
@@ -59,7 +83,7 @@ class Game:
         self._pTurn = self._NoOfTurn % self._numPlayers
         if self._NoOfTurn-self._turnOfFirstPass==2:
             if self._numPasses//2 == 1:
-                pass
+                self._passFlag=True
             else:
                 self.resetPasses()
 
@@ -85,6 +109,7 @@ class Game:
     def addPlayers(self,numPlayers):
         for i in range(numPlayers):
             self.players.append(Player())
+            self.updatePlayerRack(i)
         self._numPlayers= numPlayers
 
     def updatePlayerRack(self,n):
@@ -99,7 +124,7 @@ class Game:
         self.players[n].updateRack(rack)
         
     def isGameOver(self):
-        if not self._currBag and not self.players.displayRack():
+        if not self._currBag and not len(self.players[(self._NoOfTurn-1)%self._numPlayers].displayRack)==0  or self._passFlag==True:
             self.deductPoints()
             return True
         else:
@@ -108,7 +133,7 @@ class Game:
 
     def validateTurn(self,currMoves):
 
-        pRack =self.players[self._pTurn].displayRack()
+        pRack =deepcopy(self.players[self._pTurn].displayRack())
 
 
         playedCentre = False
@@ -284,6 +309,8 @@ class Game:
                         return False
 
         self._board = boardCopy
+        for i in range(len(self.players)):
+            self.players[i].updateRack(pRack)
 
         return True   
 
@@ -366,7 +393,7 @@ class Game:
                                 case "DLS":
                                     lMultiplier = 2
 
-                    wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
+                    wordPoints+=self._pointsDict[self._board[i][currMoves[0][2]]]*lMultiplier
                     
             for i in range(currMoves[0][1]-1,-1,-1):
                 if self._board[i][currMoves[0][2]] == " ":
@@ -381,7 +408,7 @@ class Game:
                                     lMultiplier = 3
                                 case "DLS":
                                     lMultiplier = 2
-                    wordPoints+=self._pointsDict[self._board[currMoves[i][1]][currMoves[0][2]]]*lMultiplier
+                    wordPoints+=self._pointsDict[self._board[i][currMoves[0][2]]]*lMultiplier
             wordPoints=wordPoints*vMultiplier
             totalPoints+=wordPoints
         
@@ -483,15 +510,22 @@ class Game:
         return totalPoints
 
     def findWinner(self):
-        Max = 0
+        Max = -99999999999
         index= None
         flag = False
+        print(self._numPlayers)
         for i in range (self._numPlayers):
+
+
             if self.players[i].getPoints() > Max:
                 Max = self.players[i].getPoints()
-                index == i
+                
+
+                index = i
+
                 flag = False
             elif self.players[i].getPoints() ==Max:
+
                 flag = True
         
         if flag:
@@ -500,7 +534,7 @@ class Game:
             for i in range (self._numPlayers):
                 if self.players[i].getPreEndPoints() > Max:
                     Max = self.players[i].getPreEndPoints()
-                    index == i
+                    index = i
 
         return index 
 
@@ -514,7 +548,7 @@ class Game:
         for i in range (self._numPlayers):
             self.players[i].updatePreEndPoints(self.players[i].getPoints())
             if len(self.players[i].displayRack()) == 0:
-                index = i
+                self.players[i].updatePoints(0)
             else:
                 playerPoints = 0
                 for j in self.players[i].displayRack():
@@ -524,7 +558,7 @@ class Game:
 
                 self.players[i].updatePoints(-playerPoints)
 
-        self.players[index].updatePoints(points)
+
 
 
 
@@ -544,9 +578,7 @@ class Game:
             print(str(i)+str(self._board[i]))    
 
 
-    def createDatabaseTable():
-        if not exists("./scrabble.db"):    
-            pass
+
  
         
 
@@ -586,10 +618,3 @@ class Player:
 
 
 
-    
-
-        
-
-
-
-        

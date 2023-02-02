@@ -18,6 +18,8 @@ class GUI():
         self._CEntryU=None  # create account window - username entry box
         self._CEntryP=None  # create account window - password entry box
         self._account = Account()
+        self._screen=None
+        self._languageWindow = None
 
 
         self.main()
@@ -166,16 +168,29 @@ class GUI():
 
 
     def SelectLanguage(self):
-        languageWindow=Toplevel(self._root)
-        languageWindow.title("Scrabble - Play Game - Select Language")
-        languageWindow.geometry("200x250")
-        Label(languageWindow,text = "Select language:").pack(pady=1)
+        self._languageWindow=Toplevel(self._root)
+        self._languageWindow.title("Scrabble - Play Game - Select Language")
+        self._languageWindow.geometry("200x250")
+        Label(self._languageWindow,text = "Select language:").pack(pady=1)
 
-        Button(languageWindow,text="English",width=20,height=2).pack(pady=20)
-        Button(languageWindow,text="Spanish",width=20,height=2).pack()
+        Button(self._languageWindow,text="English",width=20,height=2,command=self.PlayGameEnglish).pack(pady=20)
+        Button(self._languageWindow,text="Spanish",width=20,height=2,command =self.PlayGameSpanish).pack()
     
+    def PlayGameEnglish(self):
+        self._languageWindow.destroy()
+        game=Game(self._account)
+        game.updateLanguage("English")
+        game.addPlayers(2)
 
+        self.PlayGame()
     
+    def PlayGameSpanish(self):
+        self._languageWindow.destroy()
+        game=Game(self._account)
+        game.updateLanguage("Spanish")
+        game.addPlayers(2)
+
+        self.PlayGame()
 
     def UndoError(self):
         UError=Toplevel(self._root)
@@ -204,7 +219,43 @@ class GUI():
         accountWindow.geometry("300x300")
         result = self._account.GetWinLoss()
         games,wins,losses = result[0]
-        print(games,wins,losses)
+        name =self._account.getAccount()
+        Label(accountWindow,font=('Helvetica',44),text=f"{name}:").pack()
+        Label(accountWindow,font=('Helvetica',12),text=f"Games:{games}").pack()
+        Label(accountWindow,font=('Helvetica',12),text=f"Wins:{wins}").pack()
+        Label(accountWindow,font=('Helvetica',12),text=f"Losses:{losses}\n").pack()
+        Button(accountWindow,text="Load Games",font=('Helvetica',12),command=self.LoadGamesWindow,height=2,width=25).pack()
+        Label(accountWindow,text=" ",font=('Helvetica',12)).pack()
+        Button(accountWindow,font=('Helvetica',12),text="Quit",height=2,width=15,command=accountWindow.destroy).pack()
+
+
+    def LoadGamesWindow(self):
+        LoadGamesWindow=Toplevel(self._root)
+        LoadGamesWindow.title("Scrabble - Account - Load Games")
+        Label(LoadGamesWindow,font=('Helvetica',30),text="Load Games").pack()       
+        frameContainer=Frame(LoadGamesWindow)
+        canvasCointainer = Canvas(frameContainer)
+        frame2=Frame(canvasCointainer)
+
+        scrollbar= Scrollbar(frameContainer,orient="vertical",command=canvasCointainer.yview)
+        canvasCointainer.create_window((0,0),window=frame2,anchor="nw")
+
+        gameList=["a","b","c","d","e","f","g","h","i","j","k","l","m"]
+        for i in range(len(gameList)):
+            Button(frame2,text=gameList[i],width=50,height=1,font=('Helvetica',12)).pack(pady=5)
+        
+        frame2.update()
+        canvasCointainer.configure(yscrollcommand=scrollbar.set,scrollregion="0 0 0 %s" % frame2.winfo_height())
+        canvasCointainer.pack(side=LEFT)
+
+        scrollbar.pack(side=RIGHT,fill=Y)
+        frameContainer.pack()
+
+        Button(LoadGamesWindow,text="Quit",font=('Helvetica',12),width=15,height=1,command=LoadGamesWindow.destroy).pack(pady=20)
+
+
+
+
 
     def main(self):
 
