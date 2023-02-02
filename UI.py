@@ -17,6 +17,7 @@ class Terminal(UI):
         print(f"Player 2: {game.players[1].getPoints()} points: ")
         print(f"Player {game.getPTurn()+1}'s turn")
         print(f"Player {game.getPTurn()+1}'s rack: {game.players[game.getPTurn()].displayRack()}")
+
         print(f"Bag : {game.lenBag()} tiles")
         
         while True:

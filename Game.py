@@ -44,10 +44,37 @@ class Game:
 
 
     def SaveGame(self):
-        pass
+        if self.user.getAccount() != None:
+            board = deepcopy(self._board)
+            for i in range(len(board)):
+                board[i] =  ','.join(board[i])
+            saveboard = '.'.join(board)
+            points=[]
+            for i in range(len(self.players)):
+                points.append(self.players[i].getPoints())
+            savepoints=','.join(str(points))
+            bag =",".join( self._currBag)
+            rackP1 =self.players[0].displayRack()
+            rackP2 =self.players[1].displayRack()
+            self.user.SaveGame(self._NoOfTurn,saveboard,savepoints,bag,self._language,rackP1,rackP2)
 
-    def LoadGame(self):
-        pass
+    def LoadGame(self,GameID):
+        self.addPlayers(2)
+        result =self.user.LoadGame(GameID)
+        turn,board,points,bag,language,rackP1,rackP2 = result[0]
+        self._NoOfTurn=turn
+        self._pTurn = self._NoOfTurn%self._numPlayers
+        board = board.split(".")
+        for i in range(board):
+            board[i]=board[i].split(",")
+        points = points.split(',')
+        self.players[0].updatePoints(int(points[0]))
+        self.players[1].updatePoints(int(points[1]))
+        self.updateLanguage(language)
+        self._currBag = bag.split(",")
+        self.players[0].updateRack(rackP1)
+        self.players[1].updateRack(rackP2)
+
 
 
 
@@ -71,7 +98,7 @@ class Game:
         self._turnOfFirstPass=-9999
 
 
-    def updateLanguage(self,langauge):
+    def updateLanguage(self,langauge:str):
         self._dict.updateLanguage(langauge)
         self._currBag= self._dict.getBag()
         self._pointsDict=self._dict.getPointsDict()
@@ -110,10 +137,14 @@ class Game:
         for i in range(numPlayers):
             self.players.append(Player())
             self.updatePlayerRack(i)
+            print(self.players[i].displayRack())
         self._numPlayers= numPlayers
 
     def updatePlayerRack(self,n):
-        rack = self.players[n].displayRack()
+
+        rack=[]
+        
+        rack = deepcopy(self.players[n].displayRack())
         for i in range(7-len(rack)):
             if self._currBag:
                 x=random.randint(0,len(self._currBag)-1)
@@ -121,7 +152,7 @@ class Game:
                 self._currBag.pop(x)
             else:
                 break
-        self.players[n].updateRack(rack)
+        self.players[n].updateRack(deepcopy(rack))
         
     def isGameOver(self):
         if not self._currBag and not len(self.players[(self._NoOfTurn-1)%self._numPlayers].displayRack)==0  or self._passFlag==True:
@@ -171,7 +202,7 @@ class Game:
                 print("Coordinates not in row")
                 return False
 
-        boardCopy = self._board
+        boardCopy = deepcopy(self._board)
 
         for i in range(len(currMoves)):
             
@@ -309,8 +340,8 @@ class Game:
                         return False
 
         self._board = boardCopy
-        for i in range(len(self.players)):
-            self.players[i].updateRack(pRack)
+
+        self.players[self._pTurn].updateRack(pRack)
 
         return True   
 
@@ -417,7 +448,7 @@ class Game:
         if horz == True:
 
             hMultiplier =1
-            print("flag")
+
             for i in range(len(currMoves)):
                 wordPoints=0
                 vMultiplier=1
@@ -535,9 +566,12 @@ class Game:
                 if self.players[i].getPreEndPoints() > Max:
                     Max = self.players[i].getPreEndPoints()
                     index = i
+        self.updateWinsAndLosses(index)
 
         return index 
 
+    def getBoard(self):
+        return self._board
 
 
 
@@ -557,6 +591,15 @@ class Game:
                 points += playerPoints
 
                 self.players[i].updatePoints(-playerPoints)
+
+
+    def updateWinsAndLosses(self,winner):
+        if self.user.getAccount()!=None:
+            if winner == 0:
+                self.user.UpdateWin()
+            else:
+                self.user.UpdateLoss()
+
 
 
 
