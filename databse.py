@@ -1,6 +1,6 @@
 import sqlite3
 import hashlib
-
+from Hashing import Sha256
 
 
 class Account():
@@ -15,7 +15,7 @@ class Account():
       if result==False:
          return False
       else:
-         self._Account= result[0]
+         self._Account= result[0][0]
          return True
 
    def getAccount(self):
@@ -31,12 +31,16 @@ class Account():
       result = self._database.GetWinLoss(self._Account)
       return result
 
+   def SaveGame(self,TurnNo,Board,Scores,Bag,Langauge):
+      self._database.saveGame(self._Account,TurnNo,Board,Scores,Bag,Langauge)
+
 
 
 
 class Database():
    
    def __init__(self):
+      self._Sha256 = Sha256()
 
       self.CreateTables()
 
@@ -86,12 +90,9 @@ class Database():
          return False
 
 
-   def PasswordHash(self,password):
-      p= hashlib.sha256()
-      p.update(password.encode('utf8'))
-      pHashed = p.hexdigest()
-      return pHashed
-
+   def PasswordHash(self,password:str):
+      p=self._Sha256.HashAndDigest(password)
+      return p
 
    def Login(self,username,password):
       con = sqlite3.connect("ScrabbleDataBase.db")
@@ -104,7 +105,7 @@ class Database():
       else:
          return result
 
-   def updateWin(self,username):
+   def updateWin(self,username:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
       c.execute("UPDATE players SET Wins = Wins + 1 WHERE Username = ? ",(username,))
@@ -113,26 +114,35 @@ class Database():
 
 
       
-   def updateLoss(self,username):
+   def updateLoss(self,username:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
       c.execute("UPDATE players SET NumGames = NumGames + 1 WHERE Username = ? ",(username,))
       c.execute("UPDATE players SET Losses = Losses + 1 WHERE Username = ? ",(username,))
       con.commit()     
 
-   def saveGame(self):
+   def saveGame(self,username,TurnNo,Board,Scores,Bag,Language):
       pass
 
    def loadGame(self):
       pass
 
-
-   def GetGames(self):
-      pass
-
    def GetWinLoss(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
-      c.execute("SELECT NumGames,Wins,Losses FROM Players WHERE Username=?",(username,))
+      c.execute("SELECT NumGames,Wins,Losses FROM Players WHERE Username = ?",(username,))
       result = c.fetchall()
       return result
+
+   def GetGames(self,username):
+      con = sqlite3.connect("ScrabbleDataBase.db")
+      c = con.cursor()
+      c.execute("""SELECT GameID, TurnNo,Scores, Games.Language
+      FROM Games
+      INNER JOIN GamesPlayed ON GamesPlayed.GameID = Games.GameID
+      WHERE GamesPlayed.Username = ?""",(username,))  
+      result = c.fetchall()
+      return result  
+
+
+
