@@ -1,8 +1,7 @@
 
-from genericpath import exists
 from Languages import Dictionary
 import random
-from databse import Account
+from database import Account
 from typing import Optional
 from copy import deepcopy
 
@@ -51,11 +50,11 @@ class Game:
             saveboard = '.'.join(board)
             points=[]
             for i in range(len(self.players)):
-                points.append(self.players[i].getPoints())
-            savepoints=','.join(str(points))
+                points.append(str(self.players[i].getPoints()))
+            savepoints=','.join(points)
             bag =",".join( self._currBag)
-            rackP1 =self.players[0].displayRack()
-            rackP2 =self.players[1].displayRack()
+            rackP1 =",".join(self.players[0].displayRack())
+            rackP2 =",".join(self.players[1].displayRack())
             self.user.SaveGame(self._NoOfTurn,saveboard,savepoints,bag,self._language,rackP1,rackP2)
 
     def LoadGame(self,GameID):
@@ -65,13 +64,15 @@ class Game:
         self._NoOfTurn=turn
         self._pTurn = self._NoOfTurn%self._numPlayers
         board = board.split(".")
-        for i in range(board):
+        for i in range(len(board)):
             board[i]=board[i].split(",")
         points = points.split(',')
         self.players[0].updatePoints(int(points[0]))
         self.players[1].updatePoints(int(points[1]))
         self.updateLanguage(language)
         self._currBag = bag.split(",")
+        rackP1 = rackP1.split(",")
+        rackP2 = rackP2.split(",")
         self.players[0].updateRack(rackP1)
         self.players[1].updateRack(rackP2)
 

@@ -2,6 +2,7 @@
 from Game import Game
 from abc import ABC, abstractmethod
 import pygame
+from tkinter import *
 
 class UI(ABC):
     def run(self):
