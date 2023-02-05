@@ -30,7 +30,6 @@ class Game:
         self._dict= Dictionary()
         self._currBag =None
         self.players=[]
-        self._user = None
         self.formedWords=[]
         self._pointsDict ={}
         self._numPasses = 0

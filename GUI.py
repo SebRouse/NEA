@@ -23,6 +23,7 @@ class GUI():
         self._blank=None
         self._handleBlankWindow = None
         self._blankEntry = None
+        self._inavlidTurnFlag=False
 
         
 
@@ -278,7 +279,6 @@ class GUI():
         Button(frame,text='Account',width = 40,height =3,command = self.AccountCheck).pack(fill=X)
         Button(frame,text='Create Acount',width = 40,height =3,command=self.CreateAccountWindow).pack(fill=X)
         Button(frame,text='Login',width = 40,height =3, command=self.login).pack(fill=X)
-        Button(frame,text='Help',width = 40,height =3).pack(fill=X)
         Button(frame,text='Quit',command=self._root.quit,width = 40,height =3).pack(fill=X)
         self._root.mainloop()
 
@@ -292,6 +292,7 @@ class GUI():
         board = game.getBoard()
         buttonColourLight = (229,229,229)
         buttonColourDark=(122, 122, 122)
+        pointsFont = pygame.font.SysFont(None,14)
 
         font = pygame.font.SysFont(None, 24)
         tileFont =pygame.font.SysFont(None,36)
@@ -338,6 +339,8 @@ class GUI():
                     pygame.draw.rect(self._screen,buttonColourLight,rect)
                     txt = tileFont.render(board[row][col],True,(0,0,0))
                     self._screen.blit(txt,((block_size+1)*col+15,(block_size+1)*row+15))
+                    txt = pointsFont.render(str(game._pointsDict[board[row][col]]),True,(0,0,0))
+                    self._screen.blit(txt,(rect.x,rect.y))
 
         txt = font.render(f"{game.lenBag()} tiles left",True,(255,255,255))
         self._screen.blit(txt,(765,150))
@@ -356,9 +359,10 @@ class GUI():
                 img = titleFont.render(f"Player{turn}'s turn",True,(255,255,255))                   
         else:  
             img = titleFont.render(f"Player{turn}'s turn",True,(255,255,255))    
-            
-
-        self._screen.blit(img,(865,10))
+        self._screen.blit(img,(865,10))   
+        if self._inavlidTurnFlag:
+            img = titleFont.render(f"Invalid turn",True,(255,255,255))  
+            self._screen.blit(img,(865,250))      
 
 
 
@@ -372,7 +376,7 @@ class GUI():
         pygame.init()
         self._screen = pygame.display.set_mode((1200,765))
 
-
+        
         movesStack =[]
         board=[[" "]*15 for y in range (15)]
         pygame.display.set_caption("Scrabble - Play Scrabble")
@@ -382,7 +386,7 @@ class GUI():
 
         buttonColourLight = (229,229,229)
         buttonColourDark=(122, 122, 122)
-
+        pointsFont = pygame.font.SysFont(None,14)
         font = pygame.font.SysFont(None, 24)
         tileFont =pygame.font.SysFont(None,36)
         titleFont=pygame.font.SysFont(None,48)
@@ -399,6 +403,8 @@ class GUI():
             UIrack.append((txt,rec))
             pygame.draw.rect(self._screen,buttonColourLight,rec)
             self._screen.blit(txt,(765+40+(block_size+1)*i+15,300+10))
+            txt = pointsFont.render(str(game._pointsDict[rack[i]]),True,(0,0,0))
+            self._screen.blit(txt,(rec.x,rec.y))
 
         rectangle_draging=False
 
@@ -484,8 +490,10 @@ class GUI():
                                 txt = tileFont.render(char,True,(0,0,0))
                                 rec = pygame.Rect(765+40+(block_size+1)*i,300,block_size,block_size)
                                 UIrack.append((txt,rec))
+                            self._inavlidTurnFlag= False
                         else:
                             self.invalidTurn()
+
                     
                     #pass button#
                     if (883+200)>=mousePos[0]>=883 and (500+50)>= mousePos[1]>=500:
@@ -565,6 +573,8 @@ class GUI():
                 
                 pygame.draw.rect(self._screen,buttonColourLight,rectangle)
                 self._screen.blit(txt,(rectangle.x+15,rectangle.y+10))
+                txt = pointsFont.render(str(game._pointsDict[rack[i]]),True,(0,0,0))
+                self._screen.blit(txt,(rectangle.x,rectangle.y))
 
 
             clock.tick(FPS)
@@ -620,7 +630,10 @@ class GUI():
             self.displayWinner(winner)
             pygame.display.update()
         else:
+
             pygame.quit()
+            self._screen=None
+            self._languageWindow = None
 
     def HandleBlank(self):
         running = True
@@ -673,12 +686,7 @@ class GUI():
 
 
     def invalidTurn(self):
-        inavlidTurn=Toplevel(self._root)
-        inavlidTurn.title("Scrabble - Play Game - Invalid Turn")
-        inavlidTurn.geometry("200x100")
-        Label(inavlidTurn,text="Error \n Invalid Turn\n \n").pack()
-        Button(inavlidTurn,text="Dismiss",command=inavlidTurn.destroy).pack()
-
+        self._inavlidTurnFlag = True
 
 gui = GUI()
 gui.run()
