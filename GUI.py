@@ -1,6 +1,6 @@
 from Game import Game
 from tkinter import *
-from databse import Account
+from database import Account
 import time
 import pygame
 
@@ -244,6 +244,7 @@ class GUI():
         canvasCointainer.create_window((0,0),window=frame2,anchor="nw")
 
         gameList=self._account.GetGames()
+        print(gameList)
         for i in range(len(gameList)):
             GameID, TurnNo,Scores, Language =gameList[i]
             Button(frame2,text=f"Game {i}: Scores({Scores}) turn {TurnNo}: {Language}",width=50,height=1,font=('Helvetica',12),command=lambda:self.LoadGame(GameID)).pack(pady=5)
@@ -259,7 +260,7 @@ class GUI():
 
 
     def LoadGame(self,GameId):
-        game = Game()
+        game = Game(self._account)
         game.LoadGame(GameId)
         self.PlayGame(game)
 
@@ -365,7 +366,7 @@ class GUI():
 
     def PlayGame(self,game:Game):
 
-        
+        winner = None
         rack=game.players[game.getPTurn()].displayRack()
         FPS =30
         pygame.init()
@@ -389,7 +390,11 @@ class GUI():
 
         UIrack=[]
         for i in range(len(rack)):
-            txt = tileFont.render(rack[i],True,(0,0,0))
+            char = rack[i]
+            if rack[i]=="blank":
+                char = "_"
+
+            txt = tileFont.render(char,True,(0,0,0))
             rec = pygame.Rect(765+40+(block_size+1)*i,300,block_size,block_size)
             UIrack.append((txt,rec))
             pygame.draw.rect(self._screen,buttonColourLight,rec)
@@ -613,7 +618,9 @@ class GUI():
         if winner != None:
 
             self.displayWinner(winner)
-        pygame.display.update()
+            pygame.display.update()
+        else:
+            pygame.quit()
 
     def HandleBlank(self):
         running = True
