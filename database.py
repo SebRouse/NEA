@@ -53,6 +53,7 @@ class Account():
 
 
 
+
 class Database():
    
    def __init__(self):
@@ -171,6 +172,7 @@ class Database():
       WHERE GamesPlayed.Username = ?""",(username,))  
       result = c.fetchall()
       return result  
+
 
 
 
