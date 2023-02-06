@@ -3,8 +3,14 @@ from Game import Game
 from abc import ABC, abstractmethod
 import pygame
 from tkinter import *
+from database import Account
+
+
 
 class UI(ABC):
+    ############################
+    #Complex OOP - polymorphism#
+    ############################
     def run(self):
         raise NotImplementedError("UI not implemented")
 
@@ -12,6 +18,10 @@ class Terminal(UI):
     def __init__(self):
         pass
 
+
+    #####################################
+    #Group A skill - recursive algothims#
+    #####################################
     def turn(self,game:Game):
         print(game.printBoard())
         print(f"Player 1: {game.players[0].getPoints()} points: ")
@@ -66,7 +76,9 @@ class Terminal(UI):
         
         self.turn(game)
 
-
+    ############################
+    #Complex OOP - polymorphism#
+    ############################
     def run(self):
         game = Game(None)
         numPlayers = 2
@@ -79,11 +91,7 @@ class Terminal(UI):
 
 
 
-from Game import Game
-from tkinter import *
-from database import Account
-import time
-import pygame
+
 
 
 
@@ -98,6 +106,9 @@ class GUI():
         self._createAccountWindow=None
         self._CEntryU=None  # create account window - username entry box
         self._CEntryP=None  # create account window - password entry box
+        ##########################################
+        #Group A skill - Complex OOP -Composition#
+        ##########################################
         self._account = Account()
         self._screen=None
         self._languageWindow = None
@@ -346,7 +357,9 @@ class GUI():
         game.LoadGame(GameId)
         self.PlayGame(game)
 
-
+    ############################
+    #Complex OOP - polymorphism#
+    ############################
     def run(self):
 
 
@@ -408,7 +421,6 @@ class GUI():
                     colour=(255,255,255)
 
                 
-                
 
                 rect = pygame.Rect(col*(block_size+1), row*(block_size+1), block_size, block_size)
 
@@ -416,6 +428,10 @@ class GUI():
 
                 self._screen.blit(txt,((block_size+1)*col+6,(block_size+1)*row+15))#
 
+
+                ##############################################
+                #Group A skill - Dynamic generation of objects#
+                ###############################################
                 if board[row][col] != " ":
                     pygame.draw.rect(self._screen,buttonColourLight,rect)
                     txt = tileFont.render(board[row][col],True,(0,0,0))
@@ -534,6 +550,10 @@ class GUI():
 
 
                     ####Undo button###
+
+                    #######################################
+                    #Group A skill - list/stack operations#
+                    #######################################
                     if (883+200)>=mousePos[0]>=883 and (440+50)>= mousePos[1]>=440 :
                         if len(movesStack) != 0:
                             rectangle,endCoords,startCoords = movesStack.pop()
@@ -598,6 +618,10 @@ class GUI():
                                 winner = f"Player {i+1}"
                             running = False
                         
+
+                        ###############################################
+                        #Group A skill - Dynamic generation of objects#
+                        ###############################################
                         rack=game.players[game.getPTurn()].displayRack()
                         UIrack=[]
                         for i in range(len(rack)):

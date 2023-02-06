@@ -1,5 +1,6 @@
-
-
+#########################
+#Group A skill - Hashing#
+#########################
 class Sha256:
     def StrToBin(string:str):
         bi = ""
