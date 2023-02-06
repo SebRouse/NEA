@@ -6,6 +6,9 @@ from Hashing import Sha256
 class Account():
    def __init__(self):
       self._Account = None
+      ###########################################
+      #Group A skill - Complex OOP - Composition#
+      ###########################################
       self._database= Database()
 
 
@@ -51,17 +54,25 @@ class Account():
 
 
 
-
+######################################
+#Group B skill - simple databse model#
+#Group B skill - records             #
+######################################
 
 
 class Database():
    
    def __init__(self):
+      ###########################################
+      #Group A skill - Complex OOP - Composition#
+      ###########################################
       self._Sha256 = Sha256()
 
       self.CreateTables()
 
-
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def CreateTables(self):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -90,7 +101,9 @@ class Database():
          );""")
       con.commit()
 
-
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def CreateAccount(self,username,password):
       pHashed= self.PasswordHash(password)
 
@@ -112,6 +125,10 @@ class Database():
       p=self._Sha256.HashAndDigest(password)
       return p
 
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def Login(self,username:str,password:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -123,6 +140,10 @@ class Database():
       else:
          return result
 
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def updateWin(self,username:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -131,7 +152,10 @@ class Database():
       con.commit()
 
 
-      
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################   
    def updateLoss(self,username:str):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -139,6 +163,10 @@ class Database():
       c.execute("UPDATE players SET Losses = Losses + 1 WHERE Username = ? ",(username,))
       con.commit()     
 
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def saveGame(self,username,TurnNo,Board,Scores,Bag,Language,RackP1,RackP2):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -149,6 +177,10 @@ class Database():
       c.execute("INSERT INTO GamesPlayed (Username,GameId) VALUES (?,?)",(username,GameID))
       con.commit()
 
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def loadGame(self,GameID):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -156,6 +188,10 @@ class Database():
       result = c.fetchall()
       return result
 
+
+   ##################################
+   #Group B skill - single table SQL#
+   ##################################
    def GetWinLoss(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()
@@ -163,6 +199,10 @@ class Database():
       result = c.fetchall()
       return result
 
+
+   ##################################
+   #Group A skill - multi table SQL#
+   ##################################
    def GetGames(self,username):
       con = sqlite3.connect("ScrabbleDataBase.db")
       c = con.cursor()

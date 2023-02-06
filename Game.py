@@ -1,4 +1,3 @@
-
 from Languages import Dictionary
 import random
 from database import Account
@@ -8,6 +7,9 @@ from copy import deepcopy
 class Game:
 
     def __init__ (self,user :Optional [Account] or None):
+        ##########################
+        #Group B skill - 2D array#
+        ##########################
         self._board = [[" "]*15 for y in range (15)]
         self._boardPoints= [["TWS",None,None,"DLS",None,None,None,"TWS",None,None,None,"DLS",None,None,"TWS"],
         [None,"DWS",None,None,None,"TLS",None,None,None,"TLS",None,None,None,"DWS",None],
@@ -27,6 +29,9 @@ class Game:
         self._numPlayers=2
         self._NoOfTurn=0
         self._pTurn=0
+        ##########################################
+        #Group A skill - Complex OOP -Composition#
+        ##########################################
         self._dict= Dictionary()
         self._currBag =None
         self.players=[]
@@ -136,15 +141,24 @@ class Game:
     def getNumPlayers(self):
         return self._numPlayers
 
+
+    
+
+    ##########################################
+    #Group A skill - Complex OOP -Composition#
+    ##########################################
     def addPlayers(self,numPlayers):
         for i in range(numPlayers):
             self.players.append(Player())
             self.updatePlayerRack(i)
-            #
-            # print(self.players[i].displayRack())
+  
         self._numPlayers= numPlayers
-        #self.players[0].updatePoints(1000)
 
+
+
+    #################################
+    #Group A skill - list operations#
+    #################################
     def updatePlayerRack(self,n):
 
         rack=[]
@@ -158,7 +172,9 @@ class Game:
             else:
                 break
         self.players[n].updateRack(deepcopy(rack))
-        
+    ###############################################
+    #Group B skill -simple user defined algorithms#
+    ###############################################  
     def isGameOver(self):
         if not self._currBag and  len(self.players[(self._NoOfTurn-1)%self._numPlayers].displayRack())==0  or self._passFlag==True:
             self.deductPoints()
@@ -166,6 +182,10 @@ class Game:
         else:
             return False
 
+
+    ################################################
+    #Group A skill - complex user defined algorithm#
+   ################################################
 
     def validateTurn(self,currMoves):
 
@@ -294,7 +314,7 @@ class Game:
 
             if self._dict.search(word) == False:
                 print("Flag 1")
-                #print(word)
+
                 return False
 
             for i in range(len(currMoves)):
@@ -347,9 +367,7 @@ class Game:
                 if len(word)> 1:
                     if self._dict.search(word) == False:
               
-                    
-                        #
-                        # print(word)
+    
                         return False
 
         
@@ -398,7 +416,9 @@ class Game:
         return True   
 
 
-
+    ################################################
+    #Group A skill - complex user defined algorithm#
+   ################################################
     def calculatePoints(self,currMoves):
         if len(currMoves)==1:
             vert = False
@@ -497,7 +517,7 @@ class Game:
             wordPoints=wordPoints*vMultiplier
             totalPoints+=wordPoints
         
-        #print(currMoves)
+
 
         if horz == True:
 
@@ -522,7 +542,6 @@ class Game:
                 if not self._board[currMoves[i][1]][currMoves[i][2]].islower():
                     wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
                 word+=self._board[currMoves[i][1]][currMoves[i][2]]
-                    #print(wordPoints)
 
 
                 for j in range(currMoves[i][1]+1,15):
@@ -547,8 +566,7 @@ class Game:
                         word +=self._board[j][ currMoves[i][2]]
                 if len(word) <= 1:
                     wordPoints=0
-                #print(wordPoints)
-                #print("-")
+
                 wordPoints =wordPoints*vMultiplier
                 totalPoints+=wordPoints
 
@@ -584,21 +602,25 @@ class Game:
                                     lMultiplier = 2
                     wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
             wordPoints=wordPoints*hMultiplier
-           # print("---")
-            #print(wordPoints)
+
             totalPoints+=wordPoints
         if len(currMoves)==7:
             totalPoints+=50
-        #print(totalPoints)
+
         self.players[self._pTurn].updatePoints(totalPoints)
 
         return totalPoints
 
+
+
+    ###############################################
+    #Group B skill -simple user defined algorithms#
+    ###############################################
     def findWinner(self):
         Max = -99999999999
         index= 0
         flag = False
-       # print(self._numPlayers)
+
         for i in range (self._numPlayers):
 
 
@@ -620,7 +642,7 @@ class Game:
                 if self.players[i].getPreEndPoints() > Max:
                     Max = self.players[i].getPreEndPoints()
                     index = i
-        #print(index)
+
         self.updateWinsAndLosses(index)
 
         return index 
