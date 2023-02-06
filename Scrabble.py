@@ -1,6 +1,4 @@
-from UI import Terminal,
-
-
+from UI import Terminal,GUI,UI
 from sys import argv
 
 def usage():   
@@ -8,15 +6,15 @@ def usage():
 Usage: {argv[0]} [g | t]
 g : play with the GUI
 t : play with the Terminal""")
-
-    quit()
-
-if __name__ == "__main__":
-    if argv[1] == 'g':
+    x =input()
+    if x =='g':
         ui = GUI()
         ui.run()
-    elif argv[1] == 't':
+    elif x =='t':
         ui = Terminal()
         ui.run()
     else:
-        usage()
+        raise ValueError("Input should be either 'g' or 't'")
+
+
+usage()

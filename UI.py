@@ -26,7 +26,7 @@ class Terminal(UI):
             while True:
                 while True:
                     l = str(input(f"Player{game.getPTurn()+1} enter letter of next move and then Y and X coordinates on the following lines or -1 to end turn: "))
-                    if len(l)==1 or l == "-1":
+                    if len(l)==1 or l == "-1" or l=="blank":
                         break
                 if l == "blank":
                     l=str(input("Enter the letter the blank tile represents"))
@@ -420,7 +420,12 @@ class GUI():
                     pygame.draw.rect(self._screen,buttonColourLight,rect)
                     txt = tileFont.render(board[row][col],True,(0,0,0))
                     self._screen.blit(txt,((block_size+1)*col+15,(block_size+1)*row+15))
-                    txt = pointsFont.render(str(game._pointsDict[board[row][col]]),True,(0,0,0))
+                    pointsDict = game.getPointsDict()
+                    if board[row][col].islower():
+                        char = "0"
+                    else:
+                        char =str(pointsDict[board[row][col]])
+                    txt = pointsFont.render(char,True,(0,0,0))
                     self._screen.blit(txt,(rect.x,rect.y))
 
         txt = font.render(f"{game.lenBag()} tiles left",True,(255,255,255))
@@ -484,7 +489,12 @@ class GUI():
             UIrack.append((txt,rec))
             pygame.draw.rect(self._screen,buttonColourLight,rec)
             self._screen.blit(txt,(765+40+(block_size+1)*i+15,300+10))
-            txt = pointsFont.render(str(game._pointsDict[rack[i]]),True,(0,0,0))
+            pointsDict = game.getPointsDict()
+            if rack[i].islower():
+                char = "0"
+            else:
+                char = str(pointsDict[rack[i]])
+            txt = pointsFont.render(char,True,(0,0,0))
             self._screen.blit(txt,(rec.x,rec.y))
 
         rectangle_draging=False
@@ -654,7 +664,12 @@ class GUI():
                 
                 pygame.draw.rect(self._screen,buttonColourLight,rectangle)
                 self._screen.blit(txt,(rectangle.x+15,rectangle.y+10))
-                txt = pointsFont.render(str(game._pointsDict[rack[i]]),True,(0,0,0))
+                pointsDict=game.getPointsDict()
+                if rack[i].islower():
+                    char = "0"
+                else:
+                    char = str(pointsDict[rack[i]])
+                txt = pointsFont.render(char,True,(0,0,0))
                 self._screen.blit(txt,(rectangle.x,rectangle.y))
 
 
