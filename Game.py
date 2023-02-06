@@ -65,6 +65,7 @@ class Game:
         board = board.split(".")
         for i in range(len(board)):
             board[i]=board[i].split(",")
+        self._board= board
         points = points.split(',')
         self.players[0].updatePoints(int(points[0]))
         self.players[1].updatePoints(int(points[1]))
@@ -128,6 +129,8 @@ class Game:
     def getBoard(self):
         return self._board
 
+    def getPointsDict(self):
+        return self._pointsDict
 
 
     def getNumPlayers(self):
@@ -137,8 +140,10 @@ class Game:
         for i in range(numPlayers):
             self.players.append(Player())
             self.updatePlayerRack(i)
-            print(self.players[i].displayRack())
+            #
+            # print(self.players[i].displayRack())
         self._numPlayers= numPlayers
+        #self.players[0].updatePoints(1000)
 
     def updatePlayerRack(self,n):
 
@@ -155,7 +160,7 @@ class Game:
         self.players[n].updateRack(deepcopy(rack))
         
     def isGameOver(self):
-        if not self._currBag and not len(self.players[(self._NoOfTurn-1)%self._numPlayers].displayRack)==0  or self._passFlag==True:
+        if not self._currBag and  len(self.players[(self._NoOfTurn-1)%self._numPlayers].displayRack())==0  or self._passFlag==True:
             self.deductPoints()
             return True
         else:
@@ -186,13 +191,19 @@ class Game:
             if currMoves[i][1] ==7 and currMoves[i][2] == 7:
                 playedCentre = True
         
-        if self._NoOfTurn == 0:
+        if self._NoOfTurn == 0 or self._NoOfTurn==1 and self._numPasses==1:
             if not playedCentre:
                 return False
-        
+
+        boardCopy = deepcopy(self._board) 
 
         vert= True
         horz = True
+        if len(currMoves) ==1:
+            if boardCopy[ currMoves[0][1]+1][currMoves[0][2]] != " " or boardCopy[ currMoves[0][1]-1][currMoves[0][2]] != " ":
+                horz = False
+            elif boardCopy[ currMoves[0][1]][currMoves[0][2]-1] != " " or boardCopy[ currMoves[0][1]][currMoves[0][2]+1] != " ":
+                vert= False
         for i in range(len(currMoves)-1):
             if horz and currMoves[i][1] == currMoves[i+1][1]:
                 vert = False
@@ -202,7 +213,8 @@ class Game:
                 print("Coordinates not in row")
                 return False
 
-        boardCopy = deepcopy(self._board)
+        
+
 
         for i in range(len(currMoves)):
             
@@ -219,7 +231,7 @@ class Game:
         if vert == True:
             while True:
                 horizontalValue= currMoves[0][2]
-                if currMoves[0][1] + count >= 15 or boardCopy[currMoves[0][1]+count][horizontalValue] == None:
+                if currMoves[0][1] + count >= 15 or boardCopy[currMoves[0][1]+count][horizontalValue] == " ":
                     break
                 
                 for i in range(len(currMoves)):
@@ -231,7 +243,7 @@ class Game:
             count = 1
             while True:
                 horizontalValue= currMoves[i][2]
-                if currMoves[0][1] - count <0 or boardCopy[currMoves[0][1]-count][horizontalValue] == None:
+                if currMoves[0][1] - count <0 or boardCopy[currMoves[0][1]-count][horizontalValue] == " ":
                     break
                 
                 for i in range(len(currMoves)):
@@ -243,7 +255,7 @@ class Game:
         elif horz == True:
             while True:
                 verticalValue= currMoves[0][1]
-                if currMoves[0][2] + count >= 15 or boardCopy[verticalValue][currMoves[0][2]+count] == None:
+                if currMoves[0][2] + count >= 15 or boardCopy[verticalValue][currMoves[0][2]+count] == " ":
                     break
                 
                 for i in range(len(currMoves)):
@@ -254,7 +266,7 @@ class Game:
             count =1
             while True:
                 verticalValue= currMoves[0][1]
-                if currMoves[0][2] - count <0 or boardCopy[verticalValue][currMoves[0][2]-count] == None:
+                if currMoves[0][2] - count <0 or boardCopy[verticalValue][currMoves[0][2]-count] == " ":
                     break
                 
                 for i in range(len(currMoves)):
@@ -282,7 +294,7 @@ class Game:
 
             if self._dict.search(word) == False:
                 print("Flag 1")
-                print(word)
+                #print(word)
                 return False
 
             for i in range(len(currMoves)):
@@ -301,7 +313,7 @@ class Game:
                 if len(word) > 1:
                     if self._dict.search(word)==False:
                         print("Flag 2")
-                        print(word)
+                       # print(word)
                         return False
 
         elif horz == True:
@@ -336,8 +348,48 @@ class Game:
                     if self._dict.search(word) == False:
               
                     
-                        print(word)
+                        #
+                        # print(word)
                         return False
+
+        
+        if self._NoOfTurn == 0 or self._NoOfTurn==1 and self._numPasses==1:
+            match = False
+            for i in range(len(currMoves)):
+                try:
+                    x = [self._board[currMoves[i][1]][currMoves[i][2]+1],currMoves[i][1],currMoves[i][2]+1]
+                    if x not in currMoves:
+                        match = True
+                        break
+                except:
+                    pass
+                try:
+                    x = [self._board[currMoves[i][1]][currMoves[i][2]-1],currMoves[i][1],currMoves[i][2]-1]
+                    if x not in currMoves:
+                        match = True
+                        break
+                except:
+                    pass
+
+                try:
+                    x = [self._board[currMoves[i][1]+1][currMoves[i][2]],currMoves[i][1]+1,currMoves[i][2]]
+                    if x not in currMoves:
+                        match = True
+                        break
+                except:
+                    pass
+                try:
+                    x = [self._board[currMoves[i][1]-1][currMoves[i][2]],[currMoves[i][1]-1],[currMoves[i][2]]]
+                    if x not in currMoves:
+                        match = True
+                        break    
+                except:
+                    pass
+            if match == False:
+                return False
+
+
+
 
         self._board = boardCopy
 
@@ -380,7 +432,9 @@ class Game:
                         lMultiplier = 3
                     case "DLS":
                         lMultiplier = 2
-                wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
+                if not self._board[currMoves[i][1]][currMoves[i][2]].islower():
+                
+                    wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
                 word+= self._board [currMoves[i][1]] [currMoves[i][2]]              
                            
                 for j in range(currMoves[i][2]+1,15):
@@ -443,7 +497,7 @@ class Game:
             wordPoints=wordPoints*vMultiplier
             totalPoints+=wordPoints
         
-
+        #print(currMoves)
 
         if horz == True:
 
@@ -467,8 +521,8 @@ class Game:
                         lMultiplier = 2
                 if not self._board[currMoves[i][1]][currMoves[i][2]].islower():
                     wordPoints += self._pointsDict[ self._board [currMoves[i][1]] [currMoves[i][2]] ] *lMultiplier
-                    word+=self._board[currMoves[i][1]][currMoves[i][2]]
-                    print(wordPoints)
+                word+=self._board[currMoves[i][1]][currMoves[i][2]]
+                    #print(wordPoints)
 
 
                 for j in range(currMoves[i][1]+1,15):
@@ -493,8 +547,8 @@ class Game:
                         word +=self._board[j][ currMoves[i][2]]
                 if len(word) <= 1:
                     wordPoints=0
-                print(wordPoints)
-                print("-")
+                #print(wordPoints)
+                #print("-")
                 wordPoints =wordPoints*vMultiplier
                 totalPoints+=wordPoints
 
@@ -530,21 +584,21 @@ class Game:
                                     lMultiplier = 2
                     wordPoints += self._pointsDict[self._board[currMoves[0][1]][i]]*lMultiplier
             wordPoints=wordPoints*hMultiplier
-            print("---")
-            print(wordPoints)
+           # print("---")
+            #print(wordPoints)
             totalPoints+=wordPoints
         if len(currMoves)==7:
             totalPoints+=50
-        print(totalPoints)
+        #print(totalPoints)
         self.players[self._pTurn].updatePoints(totalPoints)
 
         return totalPoints
 
     def findWinner(self):
         Max = -99999999999
-        index= None
+        index= 0
         flag = False
-        print(self._numPlayers)
+       # print(self._numPlayers)
         for i in range (self._numPlayers):
 
 
@@ -566,6 +620,7 @@ class Game:
                 if self.players[i].getPreEndPoints() > Max:
                     Max = self.players[i].getPreEndPoints()
                     index = i
+        #print(index)
         self.updateWinsAndLosses(index)
 
         return index 
@@ -594,11 +649,12 @@ class Game:
 
 
     def updateWinsAndLosses(self,winner):
-        if self.user.getAccount()!=None:
-            if winner == 0:
-                self.user.UpdateWin()
-            else:
-                self.user.UpdateLoss()
+        if self.user != None:
+            if self.user.getAccount()!=None:
+                if winner == 0:
+                    self.user.UpdateWin()
+                else:
+                    self.user.UpdateLoss()
 
 
 
